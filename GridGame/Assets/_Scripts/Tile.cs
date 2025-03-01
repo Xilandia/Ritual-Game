@@ -13,10 +13,11 @@ public class Tile : MonoBehaviour
 	
 	[SerializeField] private Tile north, northeast, east, southeast, south, southwest, west, northwest;
 
-    private bool isClicked = false;
-	private TileBehavior behavior;
+	[SerializeField] private TileBehavior behavior;
 
-    void Init(int Ibehavior)
+    private bool isClicked = false;
+
+    public void Init(int Ibehavior)
     {
 		behavior = (TileBehavior) Ibehavior;
     }
