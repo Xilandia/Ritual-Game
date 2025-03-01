@@ -4,36 +4,63 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     [SerializeField] private int width, height;
 
     [SerializeField] private Tile tilePrefab;
 
-    [SerializeField] private Material baseColor, offSetColor;
+    [SerializeField] private Material baseColor, offSetColor, pitMaterial;
+
+    private Tile[][] tileGrid = new Tile[width+2][height+2];
 
     void GenerateGrid()
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width + 2; x++)
         {
-            for (int y = 0; y < height; y++)
+            var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, 0), Quaternion.identity);
+            spawnedTile.name = $"Border Tile {x} 0";
+            spawnedTile.init(2);
+            spawnedTile.GetComponent<Renderer>().material = pitMaterial;
+            tileGrid[x][0] = spawnedTile;
+
+            spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, height + 1), Quaternion.identity);
+            spawnedTile.name = $"Border Tile {x} {height + 1}";
+            spawnedTile.init(2);
+            spawnedTile.GetComponent<Renderer>().material = pitMaterial;
+            tileGrid[x][height + 1] = spawnedTile;
+        }
+
+        for (int y = 1; y < height; y++)
+        {
+            var spawnedTile = Instantiate(tilePrefab, new Vector3(0, 1, y), Quaternion.identity);
+            spawnedTile.name = $"Border Tile 0 {y}";
+            spawnedTile.init(2);
+            spawnedTile.GetComponent<Renderer>().material = pitMaterial;
+            tileGrid[0][y] = spawnedTile;
+
+            var spawnedTile = Instantiate(tilePrefab, new Vector3(width + 1, 1, y), Quaternion.identity);
+            spawnedTile.name = $"Border Tile {width + 1} {y}";
+            spawnedTile.init(2);
+            spawnedTile.GetComponent<Renderer>().material = pitMaterial;
+            tileGrid[width + 1][y] = spawnedTile;
+        }
+
+        for (int x = 1; x <= width; x++)
+        {
+            for (int y = 1; y <= height; y++)
             {
                 var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, y), Quaternion.identity);
                 spawnedTile.name = $"Tile {x} {y}";
-
+                spawnedTile.init(0);
                 spawnedTile.GetComponent<Renderer>().material =
                     (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0) ? baseColor : offSetColor;
+                tileGrid[x][y] = spawnedTile;
             }
         }
     }
     void Start()
     {
         GenerateGrid();
+        //SetGridNeighbors();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

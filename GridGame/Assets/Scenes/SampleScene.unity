@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a8449bbaa8fd94fbb3f8841d68011d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 16
-  height: 9
+  width: 64
+  height: 36
   tilePrefab: {fileID: 4265786179116500102, guid: 0a6bb92ce07cd3141bf6702277233253, type: 3}
   baseColor: {fileID: 2100000, guid: ae8976f2c004acd418d8f635e970c90d, type: 2}
   offSetColor: {fileID: 2100000, guid: 286469b6da9e59e4a92072327e85bb44, type: 2}
