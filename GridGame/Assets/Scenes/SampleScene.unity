@@ -157,6 +157,7 @@ MonoBehaviour:
   tilePrefab: {fileID: 4265786179116500102, guid: 0a6bb92ce07cd3141bf6702277233253, type: 3}
   baseColor: {fileID: 2100000, guid: ae8976f2c004acd418d8f635e970c90d, type: 2}
   offSetColor: {fileID: 2100000, guid: 286469b6da9e59e4a92072327e85bb44, type: 2}
+  pitMaterial: {fileID: 2100000, guid: 48f25980764ec8d4da91506ec4d5c135, type: 2}
 --- !u!4 &562285189
 Transform:
   m_ObjectHideFlags: 0
@@ -418,7 +419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 914953248627212547, guid: 0a6bb92ce07cd3141bf6702277233253, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2191844008488189497, guid: 0a6bb92ce07cd3141bf6702277233253, type: 3}
       propertyPath: m_RootOrder

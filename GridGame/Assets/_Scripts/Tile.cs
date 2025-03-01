@@ -14,6 +14,9 @@ public class Tile : MonoBehaviour
 	[SerializeField] private Tile north, northeast, east, southeast, south, southwest, west, northwest;
 
 	[SerializeField] private TileBehavior behavior;
+    [SerializeField] private IBuilding building;
+    [SerializeField] private ICharacter character;
+    [SerializeField] private IItem item;
 
     private bool isClicked = false;
 

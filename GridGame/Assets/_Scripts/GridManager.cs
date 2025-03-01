@@ -59,10 +59,29 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+    void SetGridNeighbors()
+    {
+        for (int x = 1; x <= width; x++)
+        {
+            for (int y = 1; y <= height; y++)
+            {
+                tileGrid[x, y].SetNorth(tileGrid[x, y + 1]);
+                tileGrid[x, y].SetNorthEast(tileGrid[x + 1, y + 1]);
+                tileGrid[x, y].SetEast(tileGrid[x + 1, y]);
+                tileGrid[x, y].SetSouthEast(tileGrid[x + 1, y - 1]);
+                tileGrid[x, y].SetSouth(tileGrid[x, y - 1]);
+                tileGrid[x, y].SetSouthWest(tileGrid[x - 1, y - 1]);
+                tileGrid[x, y].SetWest(tileGrid[x - 1, y]);
+                tileGrid[x, y].SetNorthWest(tileGrid[x - 1, y + 1]);
+            }
+        }
+    }
+
     void Start()
     {
         GenerateGrid();
-        //SetGridNeighbors();
+        SetGridNeighbors();
     }
 
 }
