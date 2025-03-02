@@ -20,13 +20,13 @@ public class GridManager : MonoBehaviour
         {
             var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, 0), Quaternion.identity);
             spawnedTile.name = $"Border Tile {x} 0";
-            spawnedTile.Init(2);
+            spawnedTile.Init(2, x, 0);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             tileGrid[x, 0] = spawnedTile;
 
             spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, height + 1), Quaternion.identity);
             spawnedTile.name = $"Border Tile {x} {height + 1}";
-            spawnedTile.Init(2);
+            spawnedTile.Init(2, x, height + 1);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             tileGrid[x, height + 1] = spawnedTile;
         }
@@ -35,13 +35,13 @@ public class GridManager : MonoBehaviour
         {
             var spawnedTile = Instantiate(tilePrefab, new Vector3(0, 1, y), Quaternion.identity);
             spawnedTile.name = $"Border Tile 0 {y}";
-            spawnedTile.Init(2);
+            spawnedTile.Init(2, 0, y);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             tileGrid[0, y] = spawnedTile;
 
             spawnedTile = Instantiate(tilePrefab, new Vector3(width + 1, 1, y), Quaternion.identity);
             spawnedTile.name = $"Border Tile {width + 1} {y}";
-            spawnedTile.Init(2);
+            spawnedTile.Init(2, width + 1, y);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             tileGrid[width + 1, y] = spawnedTile;
         }
@@ -52,7 +52,7 @@ public class GridManager : MonoBehaviour
             {
                 var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, y), Quaternion.identity);
                 spawnedTile.name = $"Tile {x} {y}";
-                spawnedTile.Init(0);
+                spawnedTile.Init(0, x, y);
                 spawnedTile.GetComponent<Renderer>().material =
                     (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0) ? baseColor : offSetColor;
                 tileGrid[x, y] = spawnedTile;

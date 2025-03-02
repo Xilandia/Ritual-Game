@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TileBehavior
 {
-	Passable, Blocked, Gap
+	Passable, Blocked, Border, Gap, Feature
 }
 
 public class Tile : MonoBehaviour
@@ -12,19 +12,22 @@ public class Tile : MonoBehaviour
     [SerializeField] private GameObject highlight, clicklight;
 	
 	[SerializeField] private Tile north, northeast, east, southeast, south, southwest, west, northwest;
+	[SerializeField] private int coordX, coordY;
 
-	[SerializeField] private TileBehavior behavior;
+    [SerializeField] private TileBehavior behavior;
     [SerializeField] private IBuilding building;
     [SerializeField] private ICharacter character;
     [SerializeField] private IItem item;
 
     private bool isClicked = false;
 
-    public void Init(int Ibehavior)
+    public void Init(int Ibehavior, int Ix, int Iy)
     {
 		behavior = (TileBehavior) Ibehavior;
+		coordX = Ix;
+		coordY = Iy;
     }
-
+ 
     void OnMouseEnter()
     {
         highlight.SetActive(true);
