@@ -84,10 +84,23 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void Start()
+    public void Init()
     {
         GenerateGrid();
         SetGridNeighbors();
     }
 
+    public void PlaceCharacter(ICharacter character, int x, int y)
+    {
+        if (tileGrid[x, y].IsPassable())
+        {
+            if (!tileGrid[x, y].PlaceCharacter(character))
+            {
+                Debug.Log("Character already exists on this tile.");
+                return;
+            }
+
+            character.SetCurrentTile(tileGrid[x, y]);
+        }
+    }
 }

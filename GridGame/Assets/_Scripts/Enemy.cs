@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, ICharacter
 {
+    [SerializeField] private Tile currentTile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,10 @@ public class Enemy : MonoBehaviour, ICharacter
     void Update()
     {
         
+    }
+
+    public void SetCurrentTile(Tile tile)
+    {
+        currentTile = tile;
     }
 }

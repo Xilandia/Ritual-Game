@@ -83,4 +83,19 @@ public class Tile : MonoBehaviour
 	{
 		northwest = nw;
 	}
+
+    public bool IsPassable()
+    {
+        return behavior == TileBehavior.Passable;
+    }
+
+    public bool PlaceCharacter(ICharacter character)
+    {
+        if (this.character == null)
+        {
+            this.character = character;
+            return true;
+        }
+        return false;
+    }
 }
