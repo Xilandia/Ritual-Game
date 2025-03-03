@@ -40,11 +40,18 @@ public class Tile : MonoBehaviour
 
     void OnMouseDown()
     {
-        isClicked = !isClicked;
+        isClicked = true;
+        clicklight.SetActive(isClicked);
+        GridManager.Instance.SelectTile(this);
+    }
+
+    public void DeselectTile()
+    {
+        isClicked = false;
         clicklight.SetActive(isClicked);
     }
 
-	public void SetNorth(Tile n)
+    public void SetNorth(Tile n)
 	{
 		north = n;
 	}

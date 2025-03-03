@@ -12,6 +12,17 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Material baseColor, offSetColor, pitMaterial;
 
     private Tile[,] tileGrid;
+    private bool isTileSelected;
+    private Tile selectedTile;
+
+    public static GridManager Instance { get; private set; }
+
+    public void Init()
+    {
+        Instance = this;
+        GenerateGrid();
+        SetGridNeighbors();
+    }
 
     void GenerateGrid()
     {
@@ -84,12 +95,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void Init()
-    {
-        GenerateGrid();
-        SetGridNeighbors();
-    }
-
     public void PlaceCharacter(ICharacter character, int x, int y)
     {
         if (tileGrid[x, y].IsPassable())
@@ -102,5 +107,23 @@ public class GridManager : MonoBehaviour
 
             character.SetCurrentTile(tileGrid[x, y]);
         }
+    }
+
+    public void SelectTile(Tile tile)
+    {
+        if (isTileSelected)
+        {
+            selectedTile.DeselectTile();
+        }
+
+        if (selectedTile == tile)
+        {
+            isTileSelected = false;
+            selectedTile = null;
+            return;
+        }
+
+        selectedTile = tile;
+        isTileSelected = true;
     }
 }
