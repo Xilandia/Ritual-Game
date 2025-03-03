@@ -9,10 +9,17 @@ public enum TileBehavior
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private GameObject highlight, clicklight;
-	
-	[SerializeField] private Tile north, northeast, east, southeast, south, southwest, west, northwest;
-	[SerializeField] private int coordX, coordY;
+    [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable;
+    [SerializeField] private int coordX, coordY;
+
+    public Tile North { get; set; }
+    public Tile NorthEast { get; set; }
+    public Tile East { get; set; }
+    public Tile SouthEast { get; set; }
+    public Tile South { get; set; }
+    public Tile SouthWest { get; set; }
+    public Tile West { get; set; }
+    public Tile NorthWest { get; set; }
 
     [SerializeField] private TileBehavior behavior;
     [SerializeField] private IBuilding building;
@@ -43,6 +50,11 @@ public class Tile : MonoBehaviour
         isClicked = true;
         clicklight.SetActive(isClicked);
         GridManager.Instance.SelectTile(this);
+
+        if (character != null)
+        {
+            GridManager.Instance.ShowReachableTiles(this, character.GetMovementRange(), character is Player);
+        }
     }
 
     public void DeselectTile()
@@ -51,45 +63,23 @@ public class Tile : MonoBehaviour
         clicklight.SetActive(isClicked);
     }
 
-    public void SetNorth(Tile n)
-	{
-		north = n;
-	}
+    public void SetReachable(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            playerReachable.SetActive(true);
+        }
+        else
+        {
+            enemyReachable.SetActive(true);
+        }
+    }
 
-	public void SetNorthEast(Tile ne)
-	{
-		northeast = ne;
-	}
-
-	public void SetEast(Tile e)
-	{
-		east = e;
-	}
-
-	public void SetSouthEast(Tile se)
-	{
-		southeast = se;
-	}
-
-	public void SetSouth(Tile s)
-	{
-		south = s;
-	}
-
-	public void SetSouthWest(Tile sw)
-	{
-		southwest = sw;
-	}
-
-	public void SetWest(Tile w)
-	{
-		west = w;
-	}
-
-	public void SetNorthWest(Tile nw)
-	{
-		northwest = nw;
-	}
+    public void SetUnreachable()
+    {
+        playerReachable.SetActive(false);
+        enemyReachable.SetActive(false);
+    }
 
     public bool IsPassable()
     {

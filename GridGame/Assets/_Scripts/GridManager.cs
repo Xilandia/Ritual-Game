@@ -12,6 +12,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Material baseColor, offSetColor, pitMaterial;
 
     private Tile[,] tileGrid;
+    private HashSet<Tile> reachableTiles = new HashSet<Tile>();
     private bool isTileSelected;
     private Tile selectedTile;
 
@@ -83,14 +84,14 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 1; y <= height; y++)
             {
-                tileGrid[x, y].SetNorth(tileGrid[x, y + 1]);
-                tileGrid[x, y].SetNorthEast(tileGrid[x + 1, y + 1]);
-                tileGrid[x, y].SetEast(tileGrid[x + 1, y]);
-                tileGrid[x, y].SetSouthEast(tileGrid[x + 1, y - 1]);
-                tileGrid[x, y].SetSouth(tileGrid[x, y - 1]);
-                tileGrid[x, y].SetSouthWest(tileGrid[x - 1, y - 1]);
-                tileGrid[x, y].SetWest(tileGrid[x - 1, y]);
-                tileGrid[x, y].SetNorthWest(tileGrid[x - 1, y + 1]);
+                tileGrid[x, y].North = tileGrid[x, y + 1];
+                tileGrid[x, y].NorthEast = tileGrid[x + 1, y + 1];
+                tileGrid[x, y].East = tileGrid[x + 1, y];
+                tileGrid[x, y].SouthEast = tileGrid[x + 1, y - 1];
+                tileGrid[x, y].South = tileGrid[x, y - 1];
+                tileGrid[x, y].SouthWest = tileGrid[x - 1, y - 1];
+                tileGrid[x, y].West = tileGrid[x - 1, y];
+                tileGrid[x, y].NorthWest = tileGrid[x - 1, y + 1];
             }
         }
     }
@@ -114,6 +115,7 @@ public class GridManager : MonoBehaviour
         if (isTileSelected)
         {
             selectedTile.DeselectTile();
+            ClearReachableTiles();
         }
 
         if (selectedTile == tile)
@@ -125,5 +127,33 @@ public class GridManager : MonoBehaviour
 
         selectedTile = tile;
         isTileSelected = true;
+    }
+
+    public void ShowReachableTiles(Tile tile, int movementRange, bool isPlayer)
+    {
+        if (tile == null || movementRange < 0)
+        {
+            return;
+        }
+
+        if (tile.IsPassable())
+        {
+            reachableTiles.Add(tile);
+            tile.SetReachable(isPlayer);
+        }
+
+        ShowReachableTiles(tile.North, movementRange - 1, isPlayer);
+        ShowReachableTiles(tile.East, movementRange - 1, isPlayer);
+        ShowReachableTiles(tile.South, movementRange - 1, isPlayer);
+        ShowReachableTiles(tile.West, movementRange - 1, isPlayer);
+    }
+
+    public void ClearReachableTiles()
+    {
+        foreach (Tile tile in reachableTiles)
+        {
+            tile.SetUnreachable();
+        }
+        reachableTiles.Clear();
     }
 }

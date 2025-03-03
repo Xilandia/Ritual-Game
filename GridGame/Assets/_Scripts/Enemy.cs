@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, ICharacter
 {
     [SerializeField] private Tile currentTile;
+    [SerializeField] private int movementRange = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -22,5 +23,10 @@ public class Enemy : MonoBehaviour, ICharacter
     {
         currentTile = tile;
         this.transform.position = tile.transform.position;
+    }
+
+    public int GetMovementRange()
+    {
+        return movementRange;
     }
 }
