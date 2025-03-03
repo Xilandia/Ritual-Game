@@ -110,6 +110,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void MoveCharacter(Tile tile)
+    {
+        if (selectedTile.TileHasCharacter() && selectedTile != tile && tile.IsReachable())
+        {
+            selectedTile.MoveCharacter(tile);
+            selectedTile.DeselectTile();
+            DeselectTile();
+            ClearReachableTiles();
+        }
+    }
+
     public void SelectTile(Tile tile)
     {
         if (isTileSelected)
@@ -120,13 +131,18 @@ public class GridManager : MonoBehaviour
 
         if (selectedTile == tile)
         {
-            isTileSelected = false;
-            selectedTile = null;
+            DeselectTile();
             return;
         }
 
         selectedTile = tile;
         isTileSelected = true;
+    }
+
+    void DeselectTile()
+    {
+        isTileSelected = false;
+        selectedTile = null;
     }
 
     public void ShowReachableTiles(Tile tile, int movementRange, bool isPlayer)

@@ -27,6 +27,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private IItem item;
 
     private bool isClicked = false;
+    private bool isReachable = false;
 
     public void Init(int Ibehavior, int Ix, int Iy)
     {
@@ -45,15 +46,23 @@ public class Tile : MonoBehaviour
         highlight.SetActive(false);
     }
 
-    void OnMouseDown()
+    void OnMouseOver()
     {
-        isClicked = true;
-        clicklight.SetActive(isClicked);
-        GridManager.Instance.SelectTile(this);
-
-        if (character != null)
+        if (Input.GetMouseButtonDown(0))
         {
-            GridManager.Instance.ShowReachableTiles(this, character.GetMovementRange(), character is Player);
+            isClicked = true;
+            clicklight.SetActive(isClicked);
+            GridManager.Instance.SelectTile(this);
+
+            if (character != null)
+            {
+                GridManager.Instance.ShowReachableTiles(this, character.GetMovementRange(), character is Player);
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            GridManager.Instance.MoveCharacter(this);
         }
     }
 
@@ -73,12 +82,15 @@ public class Tile : MonoBehaviour
         {
             enemyReachable.SetActive(true);
         }
+
+        isReachable = true;
     }
 
     public void SetUnreachable()
     {
         playerReachable.SetActive(false);
         enemyReachable.SetActive(false);
+        isReachable = false;
     }
 
     public bool IsPassable()
@@ -86,13 +98,39 @@ public class Tile : MonoBehaviour
         return behavior == TileBehavior.Passable;
     }
 
+    public bool IsReachable()
+    {
+        return isReachable;
+    }
+
     public bool PlaceCharacter(ICharacter character)
     {
-        if (this.character == null)
+        if (!TileHasCharacter())
         {
             this.character = character;
             return true;
         }
         return false;
+    }
+
+    public bool TileHasCharacter()
+    {
+        return character != null;
+    }
+
+    public void MoveCharacter(Tile tile)
+    {
+        if (tile.PlaceCharacter(character))
+        {
+            character.SetCurrentTile(tile);
+            character = null;
+        }
+    }
+
+    public void DebugStatus()
+    {
+        Debug.Log("Tile: " + coordX + ", " + coordY);
+        Debug.Log("Behavior: " + behavior);
+        Debug.Log("Character: " + character);
     }
 }
