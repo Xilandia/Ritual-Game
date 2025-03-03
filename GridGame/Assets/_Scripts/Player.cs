@@ -21,5 +21,6 @@ public class Player : MonoBehaviour, ICharacter
     public void SetCurrentTile(Tile tile)
     {
         currentTile = tile;
+        this.transform.position = currentTile.transform.position;
     }
 }

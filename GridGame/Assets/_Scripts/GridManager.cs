@@ -100,6 +100,7 @@ public class GridManager : MonoBehaviour
                 return;
             }
 
+            Debug.Log($"Character placed at {x}, {y}");
             character.SetCurrentTile(tileGrid[x, y]);
         }
     }

@@ -21,5 +21,6 @@ public class Enemy : MonoBehaviour, ICharacter
     public void SetCurrentTile(Tile tile)
     {
         currentTile = tile;
+        this.transform.position = tile.transform.position;
     }
 }
