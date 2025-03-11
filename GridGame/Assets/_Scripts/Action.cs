@@ -1,23 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Action : MonoBehaviour
+
+public abstract class Action
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public string ActionName { get; protected set; }
+    public ICharacter Source { get; protected set; }
+    public Tile[] TargetTile { get; protected set; }
+
+    public Dictionary<string, object> Parameters { get; protected set; }
+
+    public Action(string actionName, ICharacter source, Tile[] targetTile)
     {
-        
+        ActionName = actionName;
+        Source = source;
+        TargetTile = targetTile;
+        Parameters = new Dictionary<string, object>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Execute();
 
-    public virtual void Execute()
+    public override string ToString()
     {
-        Debug.Log("Action executed");
+        string sourceName = Source != null ? Source.Name : "None";
+        return $"{sourceName} is executing {ActionName}";
     }
 }

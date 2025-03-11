@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitiaiveManager : MonoBehaviour
+public class InitiativeManager : MonoBehaviour
 {
 
     [SerializeField] private bool isPaused = false;
     [SerializeField] private int currentPhase = 0;
+    public InitiativeManager instance;
 
     private List<Action>[] actionStack;
 
     void Start()
     {
+        instance = this;
         Pause();
         InitActionStack();
     }
@@ -45,9 +47,9 @@ public class InitiaiveManager : MonoBehaviour
         }
     }
 
-    public void AddAction(Action action)
+    public void AddAction(Action action, int phase)
     {
-        actionStack[currentPhase].Add(action);
+        actionStack[phase].Add(action);
     }
 
     void NextPhase()
@@ -65,5 +67,7 @@ public class InitiaiveManager : MonoBehaviour
         {
             action.Execute();
         }
+
+        actionStack[currentPhase].Clear();
     }
 }
