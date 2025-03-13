@@ -6,6 +6,15 @@ public class Player : MonoBehaviour, ICharacter
 {
     [SerializeField] private Tile currentTile;
     [SerializeField] private int movementRange = 3;
+    public string Name { get; private set; }
+    public StatBlock stats { get; private set; }
+
+    public void Init()
+    {
+        Name = "Player";
+        stats = new StatBlock();
+        stats.MovementRange = movementRange;
+    }
 
     public void SetCurrentTile(Tile tile)
     {
@@ -15,6 +24,6 @@ public class Player : MonoBehaviour, ICharacter
 
     public int GetMovementRange()
     {
-        return movementRange;
+        return stats.MovementRange;
     }
 }

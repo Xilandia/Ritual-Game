@@ -6,27 +6,24 @@ public class Enemy : MonoBehaviour, ICharacter
 {
     [SerializeField] private Tile currentTile;
     [SerializeField] private int movementRange = 3;
+    public string Name { get; private set; }
+    public StatBlock stats { get; private set; }
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Name = "Enemy";
+        stats = new StatBlock();
+        stats.MovementRange = movementRange;
     }
 
     public void SetCurrentTile(Tile tile)
     {
         currentTile = tile;
-        this.transform.position = tile.transform.position;
+        this.transform.position = currentTile.transform.position;
     }
 
     public int GetMovementRange()
     {
-        return movementRange;
+        return stats.MovementRange;
     }
 }
