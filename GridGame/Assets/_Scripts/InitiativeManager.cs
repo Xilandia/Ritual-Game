@@ -6,14 +6,15 @@ public class InitiativeManager : MonoBehaviour
 {
 
     [SerializeField] private bool isPaused = false;
-    [SerializeField] private int currentPhase = 0;
-    public InitiativeManager instance;
+    public int currentPhase { get; private set; }
+    public static InitiativeManager Instance;
 
     private List<Action>[] actionStack;
 
     void Start()
     {
-        instance = this;
+        Instance = this;
+        currentPhase = 0;
         Pause();
         InitActionStack();
     }
@@ -49,7 +50,9 @@ public class InitiativeManager : MonoBehaviour
 
     public void AddAction(Action action, int phase)
     {
-        actionStack[phase].Add(action);
+        actionStack[phase % 12].Add(action);
+
+        ManualNextPhase();
     }
 
     void NextPhase()
@@ -69,5 +72,11 @@ public class InitiativeManager : MonoBehaviour
         }
 
         actionStack[currentPhase].Clear();
+    }
+
+    public void ManualNextPhase()
+    {
+        NextPhase();
+        ExecutePhase();
     }
 }

@@ -112,12 +112,27 @@ public class GridManager : MonoBehaviour
 
     public void MoveCharacter(Tile tile)
     {
-        if (selectedTile.TileHasCharacter() && selectedTile != tile && tile.IsReachable())
+        /*if (selectedTile.TileHasCharacter() && selectedTile != tile && tile.IsReachable())
         {
             selectedTile.MoveCharacter(tile);
             selectedTile.DeselectTile();
             DeselectTile();
             ClearReachableTiles();
+        }*/
+
+        if (selectedTile.TileHasCharacter() && selectedTile != tile)
+        {
+            Tile[] path = Pathfinder.Instance.FindPath(selectedTile, tile);
+
+            if (path != null)
+            {
+                MoveAction movement = new MoveAction(selectedTile.GetCharacter(), path, 0);
+                InitiativeManager.Instance.AddAction(movement, InitiativeManager.Instance.currentPhase + 1);
+
+                selectedTile.DeselectTile();
+                DeselectTile();
+                ClearReachableTiles();
+            }
         }
     }
 
@@ -171,5 +186,30 @@ public class GridManager : MonoBehaviour
             tile.SetUnreachable();
         }
         reachableTiles.Clear();
+    }
+
+    public Tile GetTile(int x, int y) 
+    {
+        return tileGrid[x, y];
+    }
+
+    /*public Tile GetSelectedTile() // Might be needed, but not sure yet
+    {
+        return selectedTile;
+    }
+
+    public bool IsTileSelected()
+    {
+        return isTileSelected;
+    }*/
+
+    public int GetWidth()
+    {
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
     }
 }

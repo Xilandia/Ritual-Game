@@ -10,7 +10,8 @@ public enum TileBehavior
 public class Tile : MonoBehaviour
 {
     [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable;
-    [SerializeField] private int coordX, coordY;
+    public int coordX { get; private set; }
+    public int coordY { get; private set; }
 
     public Tile North { get; set; }
     public Tile NorthEast { get; set; }
@@ -28,6 +29,11 @@ public class Tile : MonoBehaviour
 
     private bool isClicked = false;
     private bool isReachable = false;
+
+    public Tile previousTileInPath;
+    public int fCost;
+    public int gCost;
+    public int hCost;
 
     public void Init(int Ibehavior, int Ix, int Iy)
     {
@@ -103,6 +109,25 @@ public class Tile : MonoBehaviour
         return isReachable;
     }
 
+    public bool TileHasCharacter()
+    {
+        return character != null;
+    }
+
+    public ICharacter GetCharacter()
+    {
+        return character;
+    }
+
+    public void MoveCharacter(Tile tile)
+    {
+        if (tile.PlaceCharacter(character))
+        {
+            character.SetCurrentTile(tile);
+            character = null;
+        }
+    }
+
     public bool PlaceCharacter(ICharacter character)
     {
         if (!TileHasCharacter())
@@ -113,18 +138,9 @@ public class Tile : MonoBehaviour
         return false;
     }
 
-    public bool TileHasCharacter()
+    public void CalculateFCost()
     {
-        return character != null;
-    }
-
-    public void MoveCharacter(Tile tile)
-    {
-        if (tile.PlaceCharacter(character))
-        {
-            character.SetCurrentTile(tile);
-            character = null;
-        }
+        fCost = gCost + hCost;
     }
 
     public void DebugStatus()
