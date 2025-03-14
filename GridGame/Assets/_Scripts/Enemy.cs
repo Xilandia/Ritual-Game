@@ -16,6 +16,11 @@ public class Enemy : MonoBehaviour, ICharacter
         stats.MovementRange = movementRange;
     }
 
+    public Tile GetCurrentTile()
+    {
+        return currentTile;
+    }
+
     public void SetCurrentTile(Tile tile)
     {
         currentTile = tile;
