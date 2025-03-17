@@ -24,7 +24,7 @@ public class UIClockController : MonoBehaviour
     {
         float previousRotation = currentRotation;
         currentRotation = Mathf.Lerp(currentRotation, targetRotation, Time.deltaTime * 5);
-        float deltaAngle = currentRotation - previousRotation;.
+        float deltaAngle = currentRotation - previousRotation;
         clockHand.transform.RotateAround(transform.position, Vector3.forward, -deltaAngle);
         
         if (Mathf.Abs(currentRotation - targetRotation) < 0.1f)
