@@ -133,6 +133,12 @@ public class GridManager : MonoBehaviour
                 DeselectTile();
                 ClearReachableTiles();
             }
+            else
+            {
+                Debug.Log("No path found.");
+                Debug.Log(this);
+                Debug.Log(tile);
+            }
         }
     }
 

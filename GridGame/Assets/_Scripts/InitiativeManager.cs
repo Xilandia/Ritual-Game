@@ -6,10 +6,15 @@ public class InitiativeManager : MonoBehaviour
 {
 
     [SerializeField] private bool isPaused = false;
+    [SerializeField] private bool isClockTicking = false;
+    [SerializeField] private int numPhases = 12;
+
     public int currentPhase { get; private set; }
     public static InitiativeManager Instance;
 
-    private List<Action>[] actionStack;
+    private List<Action>[] preMovementActionStack;
+    private List<Action>[] movementActionStack;
+    private List<Action>[] postMovementActionStack;
 
     void Start()
     {
@@ -41,37 +46,63 @@ public class InitiativeManager : MonoBehaviour
 
     void InitActionStack()
     {
-        actionStack = new List<Action>[12];
-        for (int i = 0; i < actionStack.Length; i++)
+        preMovementActionStack = new List<Action>[numPhases];
+        movementActionStack = new List<Action>[numPhases];
+        postMovementActionStack = new List<Action>[numPhases];
+        for (int i = 0; i < numPhases; i++)
         {
-            actionStack[i] = new List<Action>();
+            preMovementActionStack[i] = new List<Action>();
+            movementActionStack[i] = new List<Action>();
+            postMovementActionStack[i] = new List<Action>();
         }
     }
 
-    public void AddAction(Action action, int phase)
+    public void AddPreMovementAction(Action action, int phase)
     {
-        actionStack[phase % 12].Add(action);
+        preMovementActionStack[phase % numPhases].Add(action);
+
+        ManualNextPhase();
+    }
+
+    public void AddMovementAction(Action action, int phase)
+    {
+        movementActionStack[phase % numPhases].Add(action);
+
+        ManualNextPhase();
+    }
+
+    public void AddPostMovementAction(Action action, int phase)
+    {
+        postMovementActionStack[phase % numPhases].Add(action);
 
         ManualNextPhase();
     }
 
     void NextPhase()
     {
-        currentPhase++;
-        if (currentPhase >= actionStack.Length)
-        {
-            currentPhase = 0;
-        }
+        currentPhase = (currentPhase + 1) % numPhases;
     }
 
     void ExecutePhase()
     {
-        foreach (Action action in actionStack[currentPhase])
+        foreach (Action action in preMovementActionStack[currentPhase])
         {
             action.Execute();
         }
 
-        actionStack[currentPhase].Clear();
+        foreach (Action action in movementActionStack[currentPhase])
+        {
+            action.Execute();
+        }
+
+        foreach (Action action in postMovementActionStack[currentPhase])
+        {
+            action.Execute();
+        }
+
+        preMovementActionStack[currentPhase].Clear();
+        movementActionStack[currentPhase].Clear();
+        postMovementActionStack[currentPhase].Clear();
     }
 
     public void ManualNextPhase()
