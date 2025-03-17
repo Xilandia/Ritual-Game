@@ -27,7 +27,7 @@ public class InitiativeManager : MonoBehaviour
     {
         Instance = this;
         currentPhase = 0;
-        Pause();
+        //Pause();
         InitActionStack();
     }
 
@@ -101,6 +101,7 @@ public class InitiativeManager : MonoBehaviour
     public void AddMovementAction(Action action, int phase)
     {
         movementActionStack[phase % numPhases].Add(action);
+        Debug.Log("Added movement action to phase " + phase);
     }
 
     public void AddPostMovementAction(Action action, int phase)

@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437ba11a9f3ab5647a85fea13d42e755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clockHand: {fileID: 0}
+  clockHand: {fileID: 1090634552}
   isTicking: 0
 --- !u!1 &203156286
 GameObject:
@@ -213,6 +213,7 @@ MonoBehaviour:
   isPhaseDone: 0
   numPhases: 12
   clockController: {fileID: 52160481}
+  goButton: 0
 --- !u!4 &203156288
 Transform:
   m_ObjectHideFlags: 0
