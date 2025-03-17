@@ -7,7 +7,9 @@ public class InitiativeManager : MonoBehaviour
 
     [SerializeField] private bool isPaused = false;
     [SerializeField] private bool isClockTicking = false;
+    [SerializeField] private bool isPhaseDone = false;
     [SerializeField] private int numPhases = 12;
+    [SerializeField] private UIClockController clockController;
 
     public int currentPhase { get; private set; }
     public static InitiativeManager Instance;
@@ -15,6 +17,11 @@ public class InitiativeManager : MonoBehaviour
     private List<Action>[] preMovementActionStack;
     private List<Action>[] movementActionStack;
     private List<Action>[] postMovementActionStack;
+    
+    private float waitTime = 1f;
+    private float currentWait = 0f;
+    private bool queuedPause = false;
+    private bool queuedResume = false;
 
     void Start()
     {
@@ -28,20 +35,49 @@ public class InitiativeManager : MonoBehaviour
     {
         if (!isPaused)
         {
+            if (isPhaseDone)
+            {
+                currentWait = 0f;
+                isPhaseDone = false;
+            }
             // Find a way to tell when current phase is done executing to call next phase
             // NextPhase();
             // ExecutePhase();
+
+            if (currentWait < waitTime)
+            {
+                currentWait += Time.deltaTime;
+
+                if (currentWait >= waitTime)
+                {
+                    clockController.TickClock(currentPhase);
+                    isClockTicking = true;
+                }
+            }
         }
     }
 
     void Pause()
     {
-        isPaused = true;
+        if (isClockTicking)
+        {
+            queuedPause = true;
+        }
+        else
+        {
+            isPaused = true;
+        }
     }
 
     void Resume()
     {
         isPaused = false;
+
+        if (queuedResume)
+        {
+            queuedResume = false;
+            NextPhase();
+        }
     }
 
     void InitActionStack()
@@ -60,25 +96,19 @@ public class InitiativeManager : MonoBehaviour
     public void AddPreMovementAction(Action action, int phase)
     {
         preMovementActionStack[phase % numPhases].Add(action);
-
-        ManualNextPhase();
     }
 
     public void AddMovementAction(Action action, int phase)
     {
         movementActionStack[phase % numPhases].Add(action);
-
-        ManualNextPhase();
     }
 
     public void AddPostMovementAction(Action action, int phase)
     {
         postMovementActionStack[phase % numPhases].Add(action);
-
-        ManualNextPhase();
     }
 
-    void NextPhase()
+    void ProgressPhaseCounter()
     {
         currentPhase = (currentPhase + 1) % numPhases;
     }
@@ -105,9 +135,21 @@ public class InitiativeManager : MonoBehaviour
         postMovementActionStack[currentPhase].Clear();
     }
 
-    public void ManualNextPhase()
+    public void NextPhase()
     {
-        NextPhase();
+        isClockTicking = false;
+
+        if (queuedPause)
+        {
+            queuedPause = false;
+            queuedResume = true;
+            Pause();
+            return;
+        }
+
+        ProgressPhaseCounter();
         ExecutePhase();
+
+        isPhaseDone = true;
     }
 }
