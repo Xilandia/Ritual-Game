@@ -20,11 +20,13 @@ public class CharacterManager : MonoBehaviour
 
         foreach (Player player in players)
         {
+            player.Init();
             gridManager.PlaceCharacter(player, 2, 2);
         }
 
         foreach (Enemy enemy in enemies)
         {
+            enemy.Init();
             gridManager.PlaceCharacter(enemy, 16, 16);
         }
     }

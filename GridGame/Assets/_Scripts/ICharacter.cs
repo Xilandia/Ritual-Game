@@ -1,5 +1,9 @@
 public interface ICharacter
 {  
-    public void SetCurrentTile(Tile tile);
-    public int GetMovementRange();
+    string Name { get; }
+    StatBlock stats { get; }
+
+    Tile GetCurrentTile();
+    void SetCurrentTile(Tile tile);
+    int GetMovementRange();
 }
