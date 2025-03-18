@@ -80,6 +80,18 @@ public class InitiativeManager : MonoBehaviour
         }
     }
 
+    public void TogglePause()
+    {
+        if (isPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
+    }
+
     void InitActionStack()
     {
         preMovementActionStack = new List<Action>[numPhases];
