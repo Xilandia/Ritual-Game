@@ -22,10 +22,10 @@ public class Tile : MonoBehaviour
     public Tile West { get; set; }
     public Tile NorthWest { get; set; }
 
-    [SerializeField] private TileBehavior behavior;
-    [SerializeField] private IBuilding building;
-    [SerializeField] private ICharacter character;
-    [SerializeField] private IItem item;
+    public TileBehavior behavior { get; private set; }
+    private IBuilding building;
+    private ICharacter character;
+    private IItem item;
 
     private bool isClicked = false;
     private bool isReachable = false;
@@ -114,11 +114,6 @@ public class Tile : MonoBehaviour
         isReachable = false;
     }
 
-    public bool IsPassable()
-    {
-        return behavior == TileBehavior.Passable;
-    }
-
     public bool IsReachable()
     {
         return isReachable;
@@ -160,7 +155,10 @@ public class Tile : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        TileDamaged(damage);
+        if (behavior != TileBehavior.Gap) // Gaps don't bounce, blocked and borders should never take damage
+        {
+            TileDamaged(damage);
+        }
 
         if (character != null)
         {
