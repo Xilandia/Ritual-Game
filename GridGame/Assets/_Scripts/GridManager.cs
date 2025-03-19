@@ -112,14 +112,6 @@ public class GridManager : MonoBehaviour
 
     public void MoveCharacter(Tile tile)
     {
-        /*if (selectedTile.TileHasCharacter() && selectedTile != tile && tile.IsReachable())
-        {
-            selectedTile.MoveCharacter(tile);
-            selectedTile.DeselectTile();
-            DeselectTile();
-            ClearReachableTiles();
-        }*/
-
         if (selectedTile.TileHasCharacter() && selectedTile != tile)
         {
             Tile[] path = Pathfinder.Instance.FindPath(selectedTile, tile);

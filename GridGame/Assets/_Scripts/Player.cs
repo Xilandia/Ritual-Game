@@ -37,4 +37,9 @@ public class Player : MonoBehaviour, ICharacter
     {
         return stats.MovementRange;
     }
+
+    public void TakeDamage(int damage)
+    {
+        // stats.Health -= damage;
+    }
 }

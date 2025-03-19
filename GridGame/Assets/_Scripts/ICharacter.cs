@@ -17,4 +17,6 @@ public interface ICharacter
     Tile GetCurrentTile();
     void SetCurrentTile(Tile tile);
     int GetMovementRange();
+
+    void TakeDamage(int damage);
 }

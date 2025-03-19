@@ -35,13 +35,28 @@ public class Tile : MonoBehaviour
     public int gCost;
     public int hCost;
 
+    private Vector3 originalPosition;
+    private float bounceHeight;
+    private float bounceDuration;
+    private float bounceStartTime;
+    [SerializeField] private bool isBouncing;
+
     public void Init(int Ibehavior, int Ix, int Iy)
     {
 		behavior = (TileBehavior) Ibehavior;
 		coordX = Ix;
 		coordY = Iy;
+        originalPosition = transform.position;
     }
- 
+
+    void Update()
+    {
+        if (isBouncing)
+        {
+            ApplyBounce();
+        }
+    }
+
     void OnMouseEnter()
     {
         highlight.SetActive(true);
@@ -141,6 +156,42 @@ public class Tile : MonoBehaviour
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        TileDamaged(damage);
+
+        if (character != null)
+        {
+            character.TakeDamage(damage);
+        }
+    }
+
+    private void TileDamaged(int damage)
+    {
+        bounceHeight = Mathf.Clamp(damage * 0.1f, 0.1f, 2f); // Linear scaling
+        bounceDuration = Mathf.Clamp(0.2f * Mathf.Pow(damage, 0.5f), 0.2f, 1.5f); // Exponential scaling
+        bounceStartTime = Time.time;
+        isBouncing = true;
+    }
+
+    private void ApplyBounce()
+    {
+        float elapsedTime = Time.time - bounceStartTime;
+        float t = elapsedTime / bounceDuration;
+
+        if (t < 1f)
+        {
+            // Full rise and fall using a quadratic function
+            float height = bounceHeight * (4 * t * (1 - t));
+            transform.position = originalPosition + new Vector3(0, height, 0);
+        }
+        else
+        {
+            transform.position = originalPosition; // Reset to ground level
+            isBouncing = false;
+        }
     }
 
     public void DebugStatus()
