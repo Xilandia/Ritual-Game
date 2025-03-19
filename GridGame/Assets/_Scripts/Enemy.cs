@@ -8,11 +8,17 @@ public class Enemy : MonoBehaviour, ICharacter
     [SerializeField] private int movementRange = 3;
     public string Name { get; private set; }
     public StatBlock stats { get; private set; }
+    public List<IItem> inventory { get; private set; }
+    public IItem equippedItem { get; private set; }
+    public CharacterFaceDirection faceDirection { get; private set; }
 
     public void Init()
     {
         Name = "Enemy";
         stats = new StatBlock();
+        inventory = new List<IItem>();
+        equippedItem = null;
+        faceDirection = CharacterFaceDirection.Down;
         stats.MovementRange = movementRange;
     }
 
