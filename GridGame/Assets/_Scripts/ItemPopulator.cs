@@ -8,40 +8,40 @@ public class ItemPopulator : MonoBehaviour
 
     public IItem PopulateItem()
     {
-        Katana katana = new Katana("Katana");
+        Weapon weapon = new Weapon("Katana");
         
         List<int> stats = reader.GetStats();
         int[,] damageGrid = reader.GetDamageGrid();
 
-        InputItemStats(katana, stats);
-        InputDamageGrid(katana, damageGrid);
+        InputItemStats(weapon, stats);
+        InputDamageGrid(weapon, damageGrid);
 
-        return katana;
+        return weapon;
     }
 
-    void InputItemStats(Katana katana, List<int> stats)
+    void InputItemStats(Weapon weapon, List<int> stats)
     {
-        katana.attackWidth = stats[0];
-        katana.attackHeight = stats[1];
-        katana.holderCoordX = stats[2];
-        katana.holderCoordY = stats[3];
-        katana.baseDamage = stats[4];
-        katana.maxDurability = stats[5];
-        katana.durability = katana.maxDurability;
+        weapon.attackWidth = stats[0];
+        weapon.attackHeight = stats[1];
+        weapon.holderCoordX = stats[2];
+        weapon.holderCoordY = stats[3];
+        weapon.baseDamage = stats[4];
+        weapon.maxDurability = stats[5];
+        weapon.durability = weapon.maxDurability;
     }
 
-    void InputDamageGrid(Katana katana, int[,] damageGrid)
+    void InputDamageGrid(Weapon weapon, int[,] damageGrid)
     {
-        katana.damageMap = damageGrid;
-        katana.hitMap = new bool[katana.attackHeight, katana.attackWidth];
+        weapon.damageMap = damageGrid;
+        weapon.hitMap = new bool[weapon.attackHeight, weapon.attackWidth];
 
-        for (int i = 0; i < katana.attackHeight; i++)
+        for (int i = 0; i < weapon.attackHeight; i++)
         {
-            for (int j = 0; j < katana.attackWidth; j++)
+            for (int j = 0; j < weapon.attackWidth; j++)
             {
                 if (damageGrid[i, j] > 0)
                 {
-                    katana.hitMap[i, j] = true;
+                    weapon.hitMap[i, j] = true;
                 }
             }
         }

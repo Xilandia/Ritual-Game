@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class Katana : IItem
+public class Weapon : IItem
 {
     public int attackWidth;
     public int attackHeight;
@@ -17,7 +17,7 @@ public class Katana : IItem
 
     public string itemName { get; private set; }
 
-    public Katana(string IitemName)
+    public Weapon(string IitemName)
     {
         itemName = IitemName;
     }

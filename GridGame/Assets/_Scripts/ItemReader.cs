@@ -38,7 +38,7 @@ public class ItemReader : MonoBehaviour
             if (_stats.Count != 6)
                 throw new FormatException("Expected exactly 6 integer values before the grid.");
 
-            index++; // Skip blank line
+            index++;
 
             int attackWidth = _stats[0];
             int attackHeight = _stats[1];
