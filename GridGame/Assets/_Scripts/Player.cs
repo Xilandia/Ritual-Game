@@ -53,6 +53,34 @@ public class Player : MonoBehaviour, ICharacter
         }
     }
 
+    public void EquipItem(IItem item)
+    {
+        if (inventory.Contains(item)) // Consider checking if weapon too
+        {
+            equippedItem = item;
+        }
+    }
+
+    public void Unequip()
+    {
+        equippedItem = null;
+    }
+
+    public void AddItemToInventory(IItem item)
+    {
+        inventory.Add(item);
+
+        if (equippedItem == null)
+        {
+            EquipItem(item);
+        }
+    }
+
+    public void DiscardItemFromInventory(IItem item)
+    {
+        inventory.Remove(item);
+    }
+
     public int GetMovementRange()
     {
         return stats.MovementRange;

@@ -18,6 +18,10 @@ public interface ICharacter
     void SetCurrentTile(Tile tile);
     int GetMovementRange();
     void TurnCharacter(CharacterFaceDirection direction);
+    void EquipItem(IItem item);
+    void Unequip();
+    void AddItemToInventory(IItem item);
+    void DiscardItemFromInventory(IItem item);
 
     void TakeDamage(int damage);
 }
