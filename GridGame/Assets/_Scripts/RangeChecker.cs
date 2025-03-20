@@ -72,7 +72,7 @@ public class RangeChecker : MonoBehaviour
 
                     Tile t = GridManager.Instance.GetTile(pos.x, pos.y);
                     if (t == null ||
-                        (t.behavior != TileBehavior.Passable && t.behavior != TileBehavior.Feature))
+                        (t.behavior != TileBehavior.Passable))
                     {
                         hasLineOfSight = false;
                         break;

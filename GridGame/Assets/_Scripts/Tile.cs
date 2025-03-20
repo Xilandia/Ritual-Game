@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TileBehavior
 {
-	Passable, Blocked, Border, Gap, Feature
+	Passable, Blocked, Border, Gap, Special
 }
 
 public class Tile : MonoBehaviour
@@ -143,11 +143,19 @@ public class Tile : MonoBehaviour
         if (!TileHasCharacter())
         {
             this.character = character;
+
+            if (this.item != null)
+            {
+                character.EquipItem(this.item);
+                this.item = null;
+            }
+
             return true;
         }
         return false;
     }
 
+    public bool AssignItem(IItem item)
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
