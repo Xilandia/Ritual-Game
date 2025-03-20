@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour
     public Tile NorthWest { get; set; }
 
     public TileBehavior behavior { get; private set; }
-    private IBuilding building;
+    private IFeature feature;
     private ICharacter character;
     private IItem item;
 
@@ -156,6 +156,24 @@ public class Tile : MonoBehaviour
     }
 
     public bool AssignItem(IItem item)
+    {
+        if (this.character != null)
+        {
+            character.EquipItem(item);
+        }
+        else
+        {
+            if (this.item != null)
+            {
+                return false;
+            }
+
+            this.item = item;
+        }
+
+        return true;
+    }
+
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
