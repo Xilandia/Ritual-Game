@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, ICharacter
         stats = new StatBlock();
         inventory = new List<IItem>();
         equippedItem = null;
-        faceDirection = CharacterFaceDirection.Down;
+        faceDirection = CharacterFaceDirection.East;
         stats.MovementRange = movementRange;
     }
 
@@ -33,6 +33,26 @@ public class Player : MonoBehaviour, ICharacter
         this.transform.position = currentTile.transform.position;
     }
 
+    public void TurnCharacter(CharacterFaceDirection direction)
+    {
+        faceDirection = direction;
+        switch (direction)
+        {
+            case CharacterFaceDirection.North:
+                transform.rotation = Quaternion.Euler(0, 270, 0);
+                break;
+            case CharacterFaceDirection.South:
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+                break;
+            case CharacterFaceDirection.West:
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+                break;
+            case CharacterFaceDirection.East:
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                break;
+        }
+    }
+
     public int GetMovementRange()
     {
         return stats.MovementRange;
@@ -42,4 +62,5 @@ public class Player : MonoBehaviour, ICharacter
     {
         // stats.Health -= damage;
     }
+
 }

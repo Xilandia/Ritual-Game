@@ -38,19 +38,19 @@ public class RangeChecker : MonoBehaviour
                 int rotatedX = 0, rotatedY = 0;
                 switch (direction)
                 {
-                    case CharacterFaceDirection.Up:
+                    case CharacterFaceDirection.North:
                         rotatedX = offsetX;
                         rotatedY = offsetY;
                         break;
-                    case CharacterFaceDirection.Down:
+                    case CharacterFaceDirection.South:
                         rotatedX = -offsetX;
                         rotatedY = -offsetY;
                         break;
-                    case CharacterFaceDirection.Right:
+                    case CharacterFaceDirection.East:
                         rotatedX = offsetY;
                         rotatedY = -offsetX;
                         break;
-                    case CharacterFaceDirection.Left:
+                    case CharacterFaceDirection.West:
                         rotatedX = -offsetY;
                         rotatedY = offsetX;
                         break;

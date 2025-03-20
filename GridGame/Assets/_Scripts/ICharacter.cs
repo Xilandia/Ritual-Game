@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum CharacterFaceDirection
 {
-    Up, Down, Left, Right
+    North, South, West, East
 }
 
 public interface ICharacter
@@ -17,6 +17,7 @@ public interface ICharacter
     Tile GetCurrentTile();
     void SetCurrentTile(Tile tile);
     int GetMovementRange();
+    void TurnCharacter(CharacterFaceDirection direction);
 
     void TakeDamage(int damage);
 }
