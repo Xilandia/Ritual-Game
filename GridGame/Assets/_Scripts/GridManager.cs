@@ -98,7 +98,7 @@ public class GridManager : MonoBehaviour
 
     public void PlaceCharacter(ICharacter character, int x, int y)
     {
-        if (tileGrid[x, y].behavior == TileBehavior.Passable || tileGrid[x, y].behavior == TileBehavior.Feature)
+        if (tileGrid[x, y].behavior == TileBehavior.Passable)
         {
             if (!tileGrid[x, y].PlaceCharacter(character))
             {
@@ -165,7 +165,7 @@ public class GridManager : MonoBehaviour
             return;
         }
 
-        if (tile.behavior == TileBehavior.Passable || tile.behavior == TileBehavior.Feature)
+        if (tile.behavior == TileBehavior.Passable)
         {
             reachableTiles.Add(tile);
             tile.SetReachable(isPlayer);

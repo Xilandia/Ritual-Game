@@ -51,7 +51,7 @@ public class Pathfinder : MonoBehaviour
             {
                 if (closedList.Contains(neighborTile)) continue;
 
-                if (!(neighborTile.behavior == TileBehavior.Passable || neighborTile.behavior == TileBehavior.Feature))
+                if (neighborTile.behavior != TileBehavior.Passable)
                 {
                     closedList.Add(neighborTile);
                     continue;
