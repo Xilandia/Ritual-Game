@@ -12,6 +12,12 @@ public class ItemHandler : MonoBehaviour
     [SerializeField] private string itemDataExtension;
     [SerializeField] private List<string> itemDataFileNames;
 
+    public static ItemHandler Instance;
+
+    void Start()
+    {
+        Instance = this;
+    }
 
     public IItem CreateItem()
     {
@@ -26,11 +32,5 @@ public class ItemHandler : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void Init()
-    {
-        IItem item = CreateItem();
-        item.DebugItem();
     }
 }

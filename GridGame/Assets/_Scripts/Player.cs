@@ -74,6 +74,8 @@ public class Player : MonoBehaviour, ICharacter
         {
             EquipItem(item);
         }
+
+        item.DebugItem();
     }
 
     public void DiscardItemFromInventory(IItem item)

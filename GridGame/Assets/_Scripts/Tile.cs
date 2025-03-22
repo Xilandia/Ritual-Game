@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour
     public Tile West { get; set; }
     public Tile NorthWest { get; set; }
 
-    public TileBehavior behavior { get; private set; }
+    public TileBehavior behavior { get; set; }
     private IFeature feature;
     private ICharacter character;
     private IItem item;
@@ -41,9 +41,9 @@ public class Tile : MonoBehaviour
     private float bounceStartTime;
     [SerializeField] private bool isBouncing;
 
-    public void Init(int Ibehavior, int Ix, int Iy)
+    public void Init(TileBehavior Ibehavior, int Ix, int Iy)
     {
-		behavior = (TileBehavior) Ibehavior;
+		behavior = Ibehavior;
 		coordX = Ix;
 		coordY = Iy;
         originalPosition = transform.position;
@@ -146,7 +146,7 @@ public class Tile : MonoBehaviour
 
             if (this.item != null)
             {
-                character.EquipItem(this.item);
+                character.AddItemToInventory(this.item);
                 this.item = null;
             }
 

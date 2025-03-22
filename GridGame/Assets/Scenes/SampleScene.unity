@@ -593,6 +593,8 @@ MonoBehaviour:
   baseColor: {fileID: 2100000, guid: ae8976f2c004acd418d8f635e970c90d, type: 2}
   offSetColor: {fileID: 2100000, guid: 286469b6da9e59e4a92072327e85bb44, type: 2}
   pitMaterial: {fileID: 2100000, guid: 48f25980764ec8d4da91506ec4d5c135, type: 2}
+  blockedMaterial: {fileID: 2100000, guid: b19b5c4fbe1162545a718c9c96067c4a, type: 2}
+  gapMaterial: {fileID: 2100000, guid: 2811727653a374a44b9d8e4c10f00c72, type: 2}
 --- !u!4 &562285189
 Transform:
   m_ObjectHideFlags: 0
