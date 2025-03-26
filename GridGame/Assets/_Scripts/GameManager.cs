@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     {
         gridManager.Init();
         characterManager.Init();
-        itemHandler.Init();
     }
 
     void Update()

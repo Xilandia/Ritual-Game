@@ -174,6 +174,16 @@ public class Tile : MonoBehaviour
         return true;
     }
 
+    public void CharacterUseItem()
+    {
+        character.UseEquippedItem();
+    }
+
+    public void CharacterTurn(CharacterFaceDirection direction)
+    {
+        character.TurnCharacter(direction);
+    }
+
     public void CalculateFCost()
     {
         fCost = gCost + hCost;

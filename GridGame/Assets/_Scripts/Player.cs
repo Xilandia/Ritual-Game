@@ -83,6 +83,14 @@ public class Player : MonoBehaviour, ICharacter
         inventory.Remove(item);
     }
 
+    public void UseEquippedItem()
+    {
+        if (equippedItem != null)
+        {
+            equippedItem.DebugItem();
+        }
+    }
+
     public int GetMovementRange()
     {
         return stats.MovementRange;

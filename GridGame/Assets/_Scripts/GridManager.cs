@@ -216,6 +216,22 @@ public class GridManager : MonoBehaviour
         reachableTiles.Clear();
     }
 
+    public void CharacterUseItem()
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterUseItem();
+        }
+    }
+
+    public void CharacterTurn(CharacterFaceDirection direction)
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterTurn(direction);
+        }
+    }
+
     public Tile GetTile(int x, int y) 
     {
         return tileGrid[x, y];

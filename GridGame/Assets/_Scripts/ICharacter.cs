@@ -22,6 +22,7 @@ public interface ICharacter
     void Unequip();
     void AddItemToInventory(IItem item);
     void DiscardItemFromInventory(IItem item);
+    void UseEquippedItem();
 
     void TakeDamage(int damage);
 }
