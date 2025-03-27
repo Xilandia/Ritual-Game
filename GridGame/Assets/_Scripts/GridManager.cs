@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int width, height;
+    public int width { get; private set; }
+    public int height { get; private set; }
 
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform gridParent;
 
-    [SerializeField] private Material baseColor, offSetColor, pitMaterial;
+    [SerializeField] private Material baseColor, offSetColor, pitMaterial, blockedMaterial, gapMaterial;
 
     private Tile[,] tileGrid;
     private HashSet<Tile> reachableTiles = new HashSet<Tile>();
@@ -18,11 +20,14 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Instance { get; private set; }
 
-    public void Init()
+    public void Init(int iWidth, int iHeight)
     {
         Instance = this;
+        width = iWidth;
+        height = iHeight;
         GenerateGrid();
         SetGridNeighbors();
+        RandomizeGrid();
     }
 
     void GenerateGrid()
@@ -33,14 +38,14 @@ public class GridManager : MonoBehaviour
         {
             var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, 0), Quaternion.identity);
             spawnedTile.name = $"Border Tile {x} 0";
-            spawnedTile.Init(2, x, 0);
+            spawnedTile.Init(TileBehavior.Border, x, 0);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             spawnedTile.transform.SetParent(gridParent);
             tileGrid[x, 0] = spawnedTile;
 
             spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, height + 1), Quaternion.identity);
             spawnedTile.name = $"Border Tile {x} {height + 1}";
-            spawnedTile.Init(2, x, height + 1);
+            spawnedTile.Init(TileBehavior.Border, x, height + 1);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             spawnedTile.transform.SetParent(gridParent);
             tileGrid[x, height + 1] = spawnedTile;
@@ -50,14 +55,14 @@ public class GridManager : MonoBehaviour
         {
             var spawnedTile = Instantiate(tilePrefab, new Vector3(0, 1, y), Quaternion.identity);
             spawnedTile.name = $"Border Tile 0 {y}";
-            spawnedTile.Init(2, 0, y);
+            spawnedTile.Init(TileBehavior.Border, 0, y);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             spawnedTile.transform.SetParent(gridParent);
             tileGrid[0, y] = spawnedTile;
 
             spawnedTile = Instantiate(tilePrefab, new Vector3(width + 1, 1, y), Quaternion.identity);
             spawnedTile.name = $"Border Tile {width + 1} {y}";
-            spawnedTile.Init(2, width + 1, y);
+            spawnedTile.Init(TileBehavior.Border, width + 1, y);
             spawnedTile.GetComponent<Renderer>().material = pitMaterial;
             spawnedTile.transform.SetParent(gridParent);
             tileGrid[width + 1, y] = spawnedTile;
@@ -69,7 +74,7 @@ public class GridManager : MonoBehaviour
             {
                 var spawnedTile = Instantiate(tilePrefab, new Vector3(x, 1, y), Quaternion.identity);
                 spawnedTile.name = $"Tile {x} {y}";
-                spawnedTile.Init(0, x, y);
+                spawnedTile.Init(TileBehavior.Passable, x, y);
                 spawnedTile.GetComponent<Renderer>().material =
                     (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0) ? baseColor : offSetColor;
                 spawnedTile.transform.SetParent(gridParent);
@@ -96,9 +101,39 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    void RandomizeGrid() // fix when width < height - seems to break often
+    {
+        HashSet<int> randomNumbers = new HashSet<int>();
+        int divider = width > height ? width : height;
+
+        while (randomNumbers.Count < 30)
+        {
+            randomNumbers.Add(Random.Range(0, width * height));
+        }
+
+        List<int> randomTiles = randomNumbers.ToList();
+
+        for (int i = 0; i < 10; i++)
+        {
+            tileGrid[randomTiles[i] % divider + 1, randomTiles[i] / divider + 1].behavior = TileBehavior.Blocked; 
+            tileGrid[randomTiles[i] % divider + 1, randomTiles[i] / divider + 1].GetComponent<Renderer>().material = blockedMaterial;
+            tileGrid[randomTiles[i + 10] % divider + 1, randomTiles[i + 10] / divider + 1].behavior = TileBehavior.Gap;
+            tileGrid[randomTiles[i + 10] % divider + 1, randomTiles[i + 10] / divider + 1].GetComponent<Renderer>().material = gapMaterial;
+            tileGrid[randomTiles[i + 20] % divider + 1, randomTiles[i + 20] / divider + 1]
+                .AssignItem(ItemHandler.Instance.CreateItem());
+
+            Debug.Log($"Chosen tiles: {randomTiles[i]}, {randomTiles[i + 10]}, {randomTiles[i + 20]}");
+            Debug.Log($"Tile {randomTiles[i] % divider + 1} {randomTiles[i] / divider + 1} is now blocked.");
+            Debug.Log($"Tile {randomTiles[i + 10] % divider + 1} {randomTiles[i + 10] / divider + 1} is now a gap.");
+            Debug.Log($"Tile {randomTiles[i + 20] % divider + 1} {randomTiles[i + 20] / divider + 1} now has an item.");
+        }
+
+        tileGrid[3,3].AssignItem(ItemHandler.Instance.CreateItem());
+    }
+
     public void PlaceCharacter(ICharacter character, int x, int y)
     {
-        if (tileGrid[x, y].IsPassable())
+        if (tileGrid[x, y].behavior == TileBehavior.Passable)
         {
             if (!tileGrid[x, y].PlaceCharacter(character))
             {
@@ -112,14 +147,6 @@ public class GridManager : MonoBehaviour
 
     public void MoveCharacter(Tile tile)
     {
-        /*if (selectedTile.TileHasCharacter() && selectedTile != tile && tile.IsReachable())
-        {
-            selectedTile.MoveCharacter(tile);
-            selectedTile.DeselectTile();
-            DeselectTile();
-            ClearReachableTiles();
-        }*/
-
         if (selectedTile.TileHasCharacter() && selectedTile != tile)
         {
             Tile[] path = Pathfinder.Instance.FindPath(selectedTile, tile);
@@ -127,7 +154,7 @@ public class GridManager : MonoBehaviour
             if (path != null)
             {
                 MoveAction movement = new MoveAction(selectedTile.GetCharacter(), path, 0);
-                InitiativeManager.Instance.AddMovementAction(movement, InitiativeManager.Instance.currentPhase + 1);
+                InitiativeManager.Instance.AddMovementAction(movement, 1);
 
                 selectedTile.DeselectTile();
                 DeselectTile();
@@ -173,7 +200,7 @@ public class GridManager : MonoBehaviour
             return;
         }
 
-        if (tile.IsPassable())
+        if (tile.behavior == TileBehavior.Passable)
         {
             reachableTiles.Add(tile);
             tile.SetReachable(isPlayer);
@@ -194,6 +221,22 @@ public class GridManager : MonoBehaviour
         reachableTiles.Clear();
     }
 
+    public void CharacterUseItem()
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterUseItem();
+        }
+    }
+
+    public void CharacterTurn(CharacterFaceDirection direction)
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterTurn(direction);
+        }
+    }
+
     public Tile GetTile(int x, int y) 
     {
         return tileGrid[x, y];
@@ -208,14 +251,4 @@ public class GridManager : MonoBehaviour
     {
         return isTileSelected;
     }*/
-
-    public int GetWidth()
-    {
-        return width;
-    }
-
-    public int GetHeight()
-    {
-        return height;
-    }
 }

@@ -105,20 +105,22 @@ public class InitiativeManager : MonoBehaviour
         }
     }
 
-    public void AddPreMovementAction(Action action, int phase)
+    public void AddPreMovementAction(Action action, int phaseDelay)
     {
-        preMovementActionStack[phase % numPhases].Add(action);
+        preMovementActionStack[(currentPhase + phaseDelay) % numPhases].Add(action);
+        Debug.Log("Added pre-movement action to phase " + (currentPhase + phaseDelay));
     }
 
-    public void AddMovementAction(Action action, int phase)
+    public void AddMovementAction(Action action, int phaseDelay)
     {
-        movementActionStack[phase % numPhases].Add(action);
-        Debug.Log("Added movement action to phase " + phase);
+        movementActionStack[(currentPhase + phaseDelay) % numPhases].Add(action);
+        Debug.Log("Added movement action to phase " + (currentPhase + phaseDelay));
     }
 
-    public void AddPostMovementAction(Action action, int phase)
+    public void AddPostMovementAction(Action action, int phaseDelay)
     {
-        postMovementActionStack[phase % numPhases].Add(action);
+        postMovementActionStack[(currentPhase + phaseDelay) % numPhases].Add(action);
+        Debug.Log("Added post-movement action to phase " + (currentPhase + phaseDelay));
     }
 
     void ProgressPhaseCounter()

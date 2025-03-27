@@ -27,7 +27,7 @@ public class MoveAction : Action
 
         if (targetIndex != TargetTile.Length - 1)
         {
-            InitiativeManager.Instance.AddMovementAction(this, InitiativeManager.Instance.currentPhase + 1);
+            InitiativeManager.Instance.AddMovementAction(this,  1);
         }
         else
         {

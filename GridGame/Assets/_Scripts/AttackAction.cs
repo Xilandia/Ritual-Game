@@ -1,0 +1,21 @@
+using System.Collections.Generic;
+
+public class AttackAction : Action
+{
+    public int[] DamageToDeal { get; private set; }
+
+    public AttackAction(ICharacter source, Tile[] targetTile, int[] damageToDeal) : base("Move", source, targetTile)
+    {
+        //Parameters["Speed"] = source.GetMovementRange();
+        DamageToDeal = damageToDeal;
+    }
+
+
+    public override void Execute()
+    {
+        for (int i = 0; i < TargetTile.Length; i++)
+        {
+            TargetTile[i].TakeDamage(DamageToDeal[i]);
+        }
+    }
+}
