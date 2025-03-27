@@ -20,9 +20,11 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Instance { get; private set; }
 
-    public void Init()
+    public void Init(int iWidth, int iHeight)
     {
         Instance = this;
+        width = iWidth;
+        height = iHeight;
         GenerateGrid();
         SetGridNeighbors();
         RandomizeGrid();
@@ -99,7 +101,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void RandomizeGrid()
+    void RandomizeGrid() // fix when width < height - seems to break often
     {
         HashSet<int> randomNumbers = new HashSet<int>();
         int divider = width > height ? width : height;
@@ -125,6 +127,8 @@ public class GridManager : MonoBehaviour
             Debug.Log($"Tile {randomTiles[i + 10] % divider + 1} {randomTiles[i + 10] / divider + 1} is now a gap.");
             Debug.Log($"Tile {randomTiles[i + 20] % divider + 1} {randomTiles[i + 20] / divider + 1} now has an item.");
         }
+
+        tileGrid[3,3].AssignItem(ItemHandler.Instance.CreateItem());
     }
 
     public void PlaceCharacter(ICharacter character, int x, int y)
