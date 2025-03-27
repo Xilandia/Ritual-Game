@@ -11,9 +11,10 @@ public class RangeChecker : MonoBehaviour
         instance = this;
     }
 
-    public Tile[] GetLegalTargets(bool[,] hitMap, int sourceX, int sourceY, CharacterFaceDirection direction)
+    public (Tile[], int[]) GetLegalTargets(bool[,] hitMap, int[,] damageMap, int sourceX, int sourceY, CharacterFaceDirection direction)
     {
         List<Tile> legalTargets = new List<Tile>();
+        List<int> damageValues = new List<int>();
 
         int mapWidth = hitMap.GetLength(0);
         int mapHeight = hitMap.GetLength(1);
@@ -83,12 +84,15 @@ public class RangeChecker : MonoBehaviour
                 {
                     Tile targetTile = GridManager.Instance.GetTile(targetX, targetY);
                     if (targetTile)
+                    {
                         legalTargets.Add(targetTile);
+                        damageValues.Add(damageMap[i, j]);
+                    }
                 }
             }
         }
 
-        return legalTargets.ToArray();
+        return (legalTargets.ToArray(), damageValues.ToArray());
     }
 
     // Bresenham's Line Algorithm to compute the line from (x0,y0) to (x1,y1)

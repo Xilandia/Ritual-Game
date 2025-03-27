@@ -22,6 +22,16 @@ public class Weapon : IItem
         itemName = IitemName;
     }
 
+    public bool[,] GetHitMap()
+    {
+        return hitMap;
+    }
+
+    public int[,] GetDamageMap()
+    {
+        return damageMap;
+    }
+
     public void DebugItem()
     {
         StringBuilder debugMessage = new StringBuilder();

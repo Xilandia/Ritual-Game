@@ -150,7 +150,7 @@ public class GridManager : MonoBehaviour
             if (path != null)
             {
                 MoveAction movement = new MoveAction(selectedTile.GetCharacter(), path, 0);
-                InitiativeManager.Instance.AddMovementAction(movement, InitiativeManager.Instance.currentPhase + 1);
+                InitiativeManager.Instance.AddMovementAction(movement, 1);
 
                 selectedTile.DeselectTile();
                 DeselectTile();
