@@ -20,9 +20,9 @@ public class Pathfinder : MonoBehaviour
         List<Tile> openList = new List<Tile> { start };
         List<Tile> closedList = new List<Tile>();
 
-        for (int x = 1; x <= GridManager.Instance.GetWidth(); x++)
+        for (int x = 1; x <= GridManager.Instance.width; x++)
         {
-            for (int y = 1; y <= GridManager.Instance.GetHeight(); y++)
+            for (int y = 1; y <= GridManager.Instance.height; y++)
             {
                 Tile tile = GridManager.Instance.GetTile(x, y);
                 tile.gCost = int.MaxValue;

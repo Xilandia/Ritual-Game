@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int width, height;
+    public int width { get; private set; }
+    public int height { get; private set; }
 
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform gridParent;
@@ -246,14 +247,4 @@ public class GridManager : MonoBehaviour
     {
         return isTileSelected;
     }*/
-
-    public int GetWidth()
-    {
-        return width;
-    }
-
-    public int GetHeight()
-    {
-        return height;
-    }
 }
