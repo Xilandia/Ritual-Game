@@ -28,6 +28,7 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         SetGridNeighbors();
         RandomizeGrid();
+        GenerateItemsForTesting();
     }
 
     void GenerateGrid()
@@ -127,8 +128,15 @@ public class GridManager : MonoBehaviour
             Debug.Log($"Tile {randomTiles[i + 10] % divider + 1} {randomTiles[i + 10] / divider + 1} is now a gap.");
             Debug.Log($"Tile {randomTiles[i + 20] % divider + 1} {randomTiles[i + 20] / divider + 1} now has an item.");
         }
+    }
 
-        tileGrid[3,3].AssignItem(ItemHandler.Instance.CreateItem());
+    void GenerateItemsForTesting()
+    {
+        tileGrid[1, 1].AssignItem(ItemHandler.Instance.CreateItem());
+        tileGrid[2, 1].AssignItem(ItemHandler.Instance.CreateItem());
+        tileGrid[3, 1].AssignItem(ItemHandler.Instance.CreateItem());
+        tileGrid[4, 1].AssignItem(ItemHandler.Instance.CreateItem());
+        tileGrid[5, 1].AssignItem(ItemHandler.Instance.CreateItem());
     }
 
     public void PlaceCharacter(ICharacter character, int x, int y)

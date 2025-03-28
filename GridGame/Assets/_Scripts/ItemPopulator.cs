@@ -6,9 +6,9 @@ public class ItemPopulator : MonoBehaviour
 {
     [SerializeField] private ItemReader reader;
 
-    public IItem PopulateItem()
+    public IItem PopulateItem(string itemName)
     {
-        Weapon weapon = new Weapon("Katana");
+        Weapon weapon = new Weapon(itemName);
         
         List<int> stats = reader.GetStats();
         int[,] damageGrid = reader.GetDamageGrid();
