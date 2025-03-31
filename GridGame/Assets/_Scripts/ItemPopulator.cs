@@ -33,11 +33,11 @@ public class ItemPopulator : MonoBehaviour
     void InputDamageGrid(Weapon weapon, int[,] damageGrid)
     {
         weapon.damageMap = damageGrid;
-        weapon.hitMap = new bool[weapon.attackHeight, weapon.attackWidth];
+        weapon.hitMap = new bool[weapon.attackWidth, weapon.attackHeight];
 
-        for (int i = 0; i < weapon.attackHeight; i++)
+        for (int i = 0; i < weapon.attackWidth; i++)
         {
-            for (int j = 0; j < weapon.attackWidth; j++)
+            for (int j = 0; j < weapon.attackHeight; j++)
             {
                 if (damageGrid[i, j] > 0)
                 {

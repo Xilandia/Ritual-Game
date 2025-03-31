@@ -43,23 +43,23 @@ public class ItemReader : MonoBehaviour
             int attackWidth = _stats[0];
             int attackHeight = _stats[1];
 
-            _damageGrid = new int[attackHeight, attackWidth];
+            _damageGrid = new int[attackWidth, attackHeight];
 
-            for (int i = 0; i < attackHeight; i++, index++)
+            for (int y = 0; y < attackHeight; y++, index++)
             {
                 string[] gridValues = lines[index].Split(' ');
                 if (gridValues.Length != attackWidth)
-                    throw new FormatException($"Grid row {i} does not match expected width ({attackWidth}).");
+                    throw new FormatException($"Grid row {y} does not match expected width ({attackWidth}).");
 
-                for (int j = 0; j < attackWidth; j++)
+                for (int x = 0; x < attackWidth; x++)
                 {
-                    if (int.TryParse(gridValues[j], out int gridValue))
+                    if (int.TryParse(gridValues[x], out int gridValue))
                     {
-                        _damageGrid[i, j] = gridValue;
+                        _damageGrid[x, attackHeight - y - 1] = gridValue;
                     }
                     else
                     {
-                        throw new FormatException($"Invalid integer found in grid at ({i}, {j}): {gridValues[j]}");
+                        throw new FormatException($"Invalid integer found in grid at ({y}, {x}): {gridValues[x]}");
                     }
                 }
             }
@@ -80,7 +80,7 @@ public class ItemReader : MonoBehaviour
             Console.WriteLine("Invalid item file: The holder position (-1) was not found.");
             return false;
         }
-
+        Debug.Log(_filePath);
         return true;
     }
 
