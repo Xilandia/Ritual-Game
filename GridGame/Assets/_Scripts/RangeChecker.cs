@@ -11,7 +11,8 @@ public class RangeChecker : MonoBehaviour
         instance = this;
     }
 
-    public (Tile[], int[]) GetLegalTargets(bool[,] hitMap, int[,] damageMap, int sourceX, int sourceY, CharacterFaceDirection direction)
+    public (Tile[], int[]) GetLegalTargets(bool[,] hitMap, int[,] damageMap, int sourceX, int sourceY,
+        CharacterFaceDirection direction)
     {
         List<Tile> legalTargets = new List<Tile>();
         List<int> damageValues = new List<int>();
@@ -19,41 +20,71 @@ public class RangeChecker : MonoBehaviour
         int mapWidth = hitMap.GetLength(0);
         int mapHeight = hitMap.GetLength(1);
 
-        // Assume the hitMap is centered on the character.
-        int centerX = mapWidth / 2;
-        int centerY = mapHeight / 2;
-
-        for (int i = 0; i < mapWidth; i++)
+        // Find the pivot in the damageMap (cell with -1). With the new reading,
+        // (0,0) is bottom left so the pivot will be in that coordinate system.
+        int pivotX = -1, pivotY = -1;
+        for (int x = 0; x < mapWidth; x++)
         {
-            for (int j = 0; j < mapHeight; j++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                // Only consider cells marked as valid in the hitMap.
-                if (!hitMap[i, j])
+                if (damageMap[x, y] == -1)
+                {
+                    pivotX = x;
+                    pivotY = y;
+                    break;
+                }
+            }
+
+            if (pivotX != -1)
+                break;
+        }
+
+        // If no pivot is found, default to the center.
+        if (pivotX == -1 || pivotY == -1)
+        {
+            pivotX = mapWidth / 2;
+            pivotY = mapHeight / 2;
+        }
+
+        // Iterate over every cell in the hitMap.
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                if (!hitMap[x, y])
                     continue;
 
-                // Compute the offset from the center.
-                int offsetX = i - centerX;
-                int offsetY = j - centerY;
+                // Skip the pivot cell (the holder) as it represents the character.
+                if (x == pivotX && y == pivotY)
+                    continue;
 
-                // Rotate the offset based on the character’s facing.
+                // Get the damage value for this cell.
+                int cellDamage = damageMap[x, y];
+
+                // Compute the offset from the pivot (now in a bottom-left origin system).
+                int dx = x - pivotX;
+                int dy = y - pivotY;
+
                 int rotatedX = 0, rotatedY = 0;
+                // Rotate the offset according to the character's facing.
+                // The default attack map is drawn for North.
                 switch (direction)
                 {
                     case CharacterFaceDirection.North:
-                        rotatedX = offsetY;
-                        rotatedY = -offsetX;
-                        break;
-                    case CharacterFaceDirection.South:
-                        rotatedX = -offsetY;
-                        rotatedY = offsetX;
-                        break;
-                    case CharacterFaceDirection.West:
-                        rotatedX = offsetX;
-                        rotatedY = offsetY;
+                        rotatedX = dx;
+                        rotatedY = dy;
                         break;
                     case CharacterFaceDirection.East:
-                        rotatedX = -offsetX;
-                        rotatedY = -offsetY;
+                        rotatedX = dy;
+                        rotatedY = -dx;
+                        break;
+                    case CharacterFaceDirection.South:
+                        rotatedX = -dx;
+                        rotatedY = -dy;
+                        break;
+                    case CharacterFaceDirection.West:
+                        rotatedX = -dy;
+                        rotatedY = dx;
                         break;
                 }
 
@@ -61,19 +92,17 @@ public class RangeChecker : MonoBehaviour
                 int targetX = sourceX + rotatedX;
                 int targetY = sourceY + rotatedY;
 
-                // Check line of sight: all tiles from the source to the target (excluding the source)
-                // must be either Passable or Feature.
+                // Check line of sight: every tile along the line (except the source)
+                // must have a behavior of Passable or Feature.
                 List<Vector2Int> line = GetLine(sourceX, sourceY, targetX, targetY);
                 bool hasLineOfSight = true;
                 foreach (Vector2Int pos in line)
                 {
-                    // Skip checking the source tile.
                     if (pos.x == sourceX && pos.y == sourceY)
                         continue;
 
                     Tile t = GridManager.Instance.GetTile(pos.x, pos.y);
-                    if (t == null ||
-                        (t.behavior != TileBehavior.Passable))
+                    if (t == null || t.behavior != TileBehavior.Passable)
                     {
                         hasLineOfSight = false;
                         break;
@@ -86,7 +115,7 @@ public class RangeChecker : MonoBehaviour
                     if (targetTile)
                     {
                         legalTargets.Add(targetTile);
-                        damageValues.Add(damageMap[i, j]);
+                        damageValues.Add(cellDamage);
                     }
                 }
             }
@@ -105,7 +134,6 @@ public class RangeChecker : MonoBehaviour
         int sx = (x0 < x1) ? 1 : -1;
         int sy = (y0 < y1) ? 1 : -1;
         int err = dx - dy;
-
         int x = x0;
         int y = y0;
 
@@ -121,12 +149,14 @@ public class RangeChecker : MonoBehaviour
                 err -= dy;
                 x += sx;
             }
+
             if (e2 < dx)
             {
                 err += dx;
                 y += sy;
             }
         }
+
         return points;
     }
 }

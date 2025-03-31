@@ -6,9 +6,9 @@ public class ItemPopulator : MonoBehaviour
 {
     [SerializeField] private ItemReader reader;
 
-    public IItem PopulateItem()
+    public IItem PopulateItem(string itemName)
     {
-        Weapon weapon = new Weapon("Katana");
+        Weapon weapon = new Weapon(itemName);
         
         List<int> stats = reader.GetStats();
         int[,] damageGrid = reader.GetDamageGrid();
@@ -33,15 +33,15 @@ public class ItemPopulator : MonoBehaviour
     void InputDamageGrid(Weapon weapon, int[,] damageGrid)
     {
         weapon.damageMap = damageGrid;
-        weapon.hitMap = new bool[weapon.attackHeight, weapon.attackWidth];
+        weapon.hitMap = new bool[weapon.attackWidth, weapon.attackHeight];
 
-        for (int i = 0; i < weapon.attackHeight; i++)
+        for (int x = 0; x < weapon.attackWidth; x++)
         {
-            for (int j = 0; j < weapon.attackWidth; j++)
+            for (int y = 0; y < weapon.attackHeight; y++)
             {
-                if (damageGrid[i, j] > 0)
+                if (damageGrid[x, y] > 0)
                 {
-                    weapon.hitMap[i, j] = true;
+                    weapon.hitMap[x, y] = true;
                 }
             }
         }

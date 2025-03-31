@@ -91,7 +91,7 @@ public class Player : MonoBehaviour, ICharacter
             (Tile[] tilesToTarget, int[] damageToDeal) = RangeChecker.instance.GetLegalTargets(equippedItem.GetHitMap(),
                 equippedItem.GetDamageMap(), currentTile.coordX, currentTile.coordY, faceDirection);
             AttackAction action = new AttackAction(this, tilesToTarget, damageToDeal);
-            InitiativeManager.Instance.AddPostMovementAction(action, 3);
+            InitiativeManager.Instance.AddPostMovementAction(action, 1);
         }
     }
 

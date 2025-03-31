@@ -28,6 +28,8 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         SetGridNeighbors();
         RandomizeGrid();
+        GenerateItemsForTesting();
+        //XYTest();
     }
 
     void GenerateGrid()
@@ -127,10 +129,33 @@ public class GridManager : MonoBehaviour
             Debug.Log($"Tile {randomTiles[i + 10] % divider + 1} {randomTiles[i + 10] / divider + 1} is now a gap.");
             Debug.Log($"Tile {randomTiles[i + 20] % divider + 1} {randomTiles[i + 20] / divider + 1} now has an item.");
         }
-
-        tileGrid[3,3].AssignItem(ItemHandler.Instance.CreateItem());
     }
 
+    void GenerateItemsForTesting()
+    {
+        tileGrid[1, 1].AssignItem(ItemHandler.Instance.CreateItem("Ballista"));
+        tileGrid[2, 1].AssignItem(ItemHandler.Instance.CreateItem("Blast"));
+        tileGrid[3, 1].AssignItem(ItemHandler.Instance.CreateItem("Javelin"));
+        tileGrid[4, 1].AssignItem(ItemHandler.Instance.CreateItem("Katana"));
+        tileGrid[5, 1].AssignItem(ItemHandler.Instance.CreateItem("Rapier"));
+    }
+
+
+    void XYTest()
+    {
+        tileGrid[1, 2].GetComponent<Renderer>().material = blockedMaterial;
+        tileGrid[1, 3].GetComponent<Renderer>().material = blockedMaterial;
+        tileGrid[2, 4].GetComponent<Renderer>().material = blockedMaterial;
+        tileGrid[5, 4].GetComponent<Renderer>().material = blockedMaterial;
+
+        for (int i = 7; i < 10; i++)
+        {
+            for (int j = 7; j < 9; j++)
+            {
+                tileGrid[i, j].GetComponent<Renderer>().material = blockedMaterial;
+            }
+        }
+    }
     public void PlaceCharacter(ICharacter character, int x, int y)
     {
         if (tileGrid[x, y].behavior == TileBehavior.Passable)

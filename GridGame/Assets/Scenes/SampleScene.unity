@@ -1118,7 +1118,11 @@ MonoBehaviour:
   itemDataFolder: ItemData
   itemDataExtension: .txt
   itemDataFileNames:
+  - Ballista
+  - Blast
+  - Javelin
   - Katana
+  - Rapier
 --- !u!4 &1222742285
 Transform:
   m_ObjectHideFlags: 0
