@@ -23,14 +23,14 @@ public class RangeChecker : MonoBehaviour
         // Find the pivot in the damageMap (cell with -1). With the new reading,
         // (0,0) is bottom left so the pivot will be in that coordinate system.
         int pivotX = -1, pivotY = -1;
-        for (int i = 0; i < mapWidth; i++)
+        for (int x = 0; x < mapWidth; x++)
         {
-            for (int j = 0; j < mapHeight; j++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                if (damageMap[i, j] == -1)
+                if (damageMap[x, y] == -1)
                 {
-                    pivotX = i;
-                    pivotY = j;
+                    pivotX = x;
+                    pivotY = y;
                     break;
                 }
             }
@@ -47,23 +47,23 @@ public class RangeChecker : MonoBehaviour
         }
 
         // Iterate over every cell in the hitMap.
-        for (int i = 0; i < mapWidth; i++)
+        for (int x = 0; x < mapWidth; x++)
         {
-            for (int j = 0; j < mapHeight; j++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                if (!hitMap[i, j])
+                if (!hitMap[x, y])
                     continue;
 
                 // Skip the pivot cell (the holder) as it represents the character.
-                if (i == pivotX && j == pivotY)
+                if (x == pivotX && y == pivotY)
                     continue;
 
                 // Get the damage value for this cell.
-                int cellDamage = damageMap[i, j];
+                int cellDamage = damageMap[x, y];
 
                 // Compute the offset from the pivot (now in a bottom-left origin system).
-                int dx = i - pivotX;
-                int dy = j - pivotY;
+                int dx = x - pivotX;
+                int dy = y - pivotY;
 
                 int rotatedX = 0, rotatedY = 0;
                 // Rotate the offset according to the character's facing.

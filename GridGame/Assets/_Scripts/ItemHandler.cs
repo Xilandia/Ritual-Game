@@ -27,6 +27,12 @@ public class ItemHandler : MonoBehaviour
     public IItem CreateItem()
     {
         string dataFileName = itemDataFileNames[Random.Range(0, itemDataFileNames.Count)];
+
+        return CreateItem(dataFileName);
+    }
+
+    public IItem CreateItem(string dataFileName)
+    {
         string filePath = System.IO.Path.Combine(Application.dataPath, itemDataFolder, $"{dataFileName}{itemDataExtension}");
 
         reader.PrepareReader(filePath);

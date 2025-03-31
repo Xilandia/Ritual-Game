@@ -6,7 +6,6 @@ public class AttackAction : Action
 
     public AttackAction(ICharacter source, Tile[] targetTile, int[] damageToDeal) : base("Move", source, targetTile)
     {
-        //Parameters["Speed"] = source.GetMovementRange();
         DamageToDeal = damageToDeal;
     }
 
