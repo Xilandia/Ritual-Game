@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManaFont : MonoBehaviour
+public class ManaFont : MonoBehaviour, ManaFeature
 {
     // Start is called before the first frame update
     void Start()

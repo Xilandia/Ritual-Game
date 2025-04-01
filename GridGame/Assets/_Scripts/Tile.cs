@@ -9,7 +9,7 @@ public enum TileBehavior
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable;
+    [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable, manaParent;
     public int coordX { get; private set; }
     public int coordY { get; private set; }
 
