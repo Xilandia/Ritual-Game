@@ -24,5 +24,6 @@ public interface ICharacter
     void DiscardItemFromInventory(IItem item);
     void UseEquippedItem();
 
+    float GetDamageMultiplier();
     void TakeDamage(int damage);
 }

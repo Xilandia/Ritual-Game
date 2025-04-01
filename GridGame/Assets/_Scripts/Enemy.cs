@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour, ICharacter
 {
     [SerializeField] private Tile currentTile;
     [SerializeField] private int movementRange = 3;
+    [SerializeField] private int health = 20;
     public string Name { get; private set; }
     public StatBlock stats { get; private set; }
     public List<IItem> inventory { get; private set; }
@@ -20,6 +21,9 @@ public class Enemy : MonoBehaviour, ICharacter
         equippedItem = null;
         faceDirection = CharacterFaceDirection.East;
         stats.MovementRange = movementRange;
+        stats.Health = health;
+        stats.MaxHealth = health;
+        stats.Strength = 5;
     }
 
     public Tile GetCurrentTile()
@@ -94,8 +98,19 @@ public class Enemy : MonoBehaviour, ICharacter
         return stats.MovementRange;
     }
 
+    public float GetDamageMultiplier()
+    {
+        return stats.Strength;
+    }
+
     public void TakeDamage(int damage)
     {
-        // stats.Health -= damage;
+        stats.Health -= (damage - stats.Defense);
+
+        if (stats.Health <= 0)
+        {
+            //Die();
+            Debug.Log($"Enemy \"{Name}\" has died");
+        }
     }
 }

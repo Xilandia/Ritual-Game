@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class AttackAction : Action
@@ -12,9 +13,11 @@ public class AttackAction : Action
 
     public override void Execute()
     {
+        float damageMultiplier = Source.GetDamageMultiplier();
+
         for (int i = 0; i < TargetTile.Length; i++)
         {
-            TargetTile[i].TakeDamage(DamageToDeal[i]);
+            TargetTile[i].TakeDamage((int)Math.Round(DamageToDeal[i] * damageMultiplier));
         }
     }
 }
