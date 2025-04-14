@@ -23,6 +23,7 @@ public class Tile : MonoBehaviour
     public Tile NorthWest { get; set; }
 
     public TileBehavior behavior { get; set; }
+    [SerializeField] private ManaContainer manaContainer;
     private IFeature feature;
     private ICharacter character;
     private IItem item;
@@ -226,6 +227,21 @@ public class Tile : MonoBehaviour
             transform.position = originalPosition; // Reset to ground level
             isBouncing = false;
         }
+    }
+
+    public void AddMana(ManaParticle newParticle)
+    {
+        if (behavior == TileBehavior.Border)
+        {
+            return;
+        }
+
+        manaContainer.AddMana(newParticle);
+    }
+
+    public bool RemoveMana(ManaParticle particle)
+    {
+        return manaContainer.RemoveMana(particle);
     }
 
     public void DebugStatus()

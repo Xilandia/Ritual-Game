@@ -10,6 +10,7 @@ public class InitiativeManager : MonoBehaviour
     [SerializeField] private bool isPhaseDone = false;
     [SerializeField] private int numPhases = 12;
     [SerializeField] private UIClockController clockController;
+    [SerializeField] private ManaManager manaManager;
 
     public int currentPhase { get; private set; }
     public static InitiativeManager Instance;
@@ -40,9 +41,6 @@ public class InitiativeManager : MonoBehaviour
                 currentWait = 0f;
                 isPhaseDone = false;
             }
-            // Find a way to tell when current phase is done executing to call next phase
-            // NextPhase();
-            // ExecutePhase();
 
             if (currentWait < waitTime)
             {
@@ -130,6 +128,8 @@ public class InitiativeManager : MonoBehaviour
 
     void ExecutePhase()
     {
+        manaManager.PerformManaPhase();
+
         foreach (Action action in preMovementActionStack[currentPhase])
         {
             action.Execute();

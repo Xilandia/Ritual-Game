@@ -7,12 +7,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private CharacterManager characterManager;
     [SerializeField] private ItemHandler itemHandler;
+    [SerializeField] private ManaManager manaManager;
 
     [SerializeField] private int width;
     [SerializeField] private int height;
 
     void Start()
     {
+        manaManager.Init();
         gridManager.Init(width, height);
         characterManager.Init();
         //itemHandler.Init();
