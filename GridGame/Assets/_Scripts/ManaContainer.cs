@@ -43,9 +43,10 @@ public class ManaContainer : MonoBehaviour
 
     public void UpdateManaFlow()
     {
-        foreach (ManaParticle mp in manaParticles)
+        for (int i = 0; i < manaParticles.Count; i++)
         {
-            ManaFlowCalculator.Instance.CalculateManaFlow(tile, this, mp);
+            ManaParticle mp = ManaFlowCalculator.Instance.CalculateManaFlow(tile, this, manaParticles[i]);
+            manaParticles[i] = mp;
         }
     }
 
