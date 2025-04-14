@@ -1,29 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Numerics;
 
 public enum ManaType
 {
     Neutral,
-    Fire, Water, Air, Earth,
+    Fire, Water, Air, Earth, Metal, Wood, Electric, Emotion,
     Light, Dark,
-    Life, Death
+    None, All
 }
 
-public class ManaParticle : MonoBehaviour
+public struct ManaParticle
 {
-    [SerializeField] private ManaType manaType;
-    [SerializeField] private int manaAmount;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public ManaType type;
+    // public ManaAspects aspect;
+    public int quantity;
+    public int particleX;
+    public int particleY;
+    public Vector2 velocity;
 }
