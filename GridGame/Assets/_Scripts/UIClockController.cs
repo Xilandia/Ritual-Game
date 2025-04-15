@@ -30,7 +30,8 @@ public class UIClockController : MonoBehaviour
         if (Mathf.Abs(currentRotation - targetRotation) < 0.1f)
         {
             isTicking = false;
-            InitiativeManager.Instance.NextPhase();
+            //InitiativeManager.Instance.NextPhase();
+            ManaManager.Instance.PerformManaPhase();
         }
     }
 

@@ -24,6 +24,7 @@ public class Tile : MonoBehaviour
 
     public TileBehavior behavior { get; set; }
     [SerializeField] private ManaContainer manaContainer;
+    [SerializeField] private ManaVisualizer manaVisualizer;
     private IFeature feature;
     private ICharacter character;
     private IItem item;
@@ -229,19 +230,24 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void AddMana(ManaParticle newParticle)
+    public int AddMana(ManaParticle newParticle)
     {
         if (behavior == TileBehavior.Border)
         {
-            return;
+            return -1;
         }
 
-        manaContainer.AddMana(newParticle);
+        return manaContainer.AddMana(newParticle);
     }
 
     public bool RemoveMana(ManaParticle particle)
     {
         return manaContainer.RemoveMana(particle);
+    }
+
+    public ManaVisualizer GetManaVisualizer()
+    {
+        return manaVisualizer;
     }
 
     public void DebugStatus()

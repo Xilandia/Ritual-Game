@@ -18,6 +18,7 @@ public class ManaFlowCalculator : MonoBehaviour
         manaParticle.velocity = new Vector2(0f, -1f);
         manaParticle.particleX += Mathf.RoundToInt(manaParticle.velocity.x);
         manaParticle.particleY += Mathf.RoundToInt(manaParticle.velocity.y);
+        manaParticle.prevOrb = manaParticle.nextOrb;
         return manaParticle;
     }
 }

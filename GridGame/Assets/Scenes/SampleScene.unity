@@ -245,7 +245,6 @@ MonoBehaviour:
   isPhaseDone: 0
   numPhases: 12
   clockController: {fileID: 52160481}
-  manaManager: {fileID: 357094002}
 --- !u!4 &203156288
 Transform:
   m_ObjectHideFlags: 0
@@ -603,6 +602,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75d5649fbbfc904291b1fc606d6bb8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ManaContainers: []
+  ManaVisualizers: []
+  manaGenerationRate: 2
+  manaGeneratedCount: 0
 --- !u!1 &414147698
 GameObject:
   m_ObjectHideFlags: 0

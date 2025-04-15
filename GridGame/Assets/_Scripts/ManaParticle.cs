@@ -18,4 +18,6 @@ public struct ManaParticle
     public int particleX;
     public int particleY;
     public Vector2 velocity;
+    public int prevOrb;
+    public int nextOrb;
 }

@@ -8,6 +8,7 @@ public class ManaContainer : MonoBehaviour
     public int softCap; // Adjusted soft cap based on aspects.
 
     [SerializeField] private Tile tile;
+    [SerializeField] private ManaVisualizer manaVisualizer;
     
     private List<ManaParticle> manaParticles = new List<ManaParticle>();
     private List<ManaParticle> incomingParticles = new List<ManaParticle>();
@@ -18,9 +19,10 @@ public class ManaContainer : MonoBehaviour
         ManaManager.Instance.AddManaContainer(this);
     }
 
-    public void AddMana(ManaParticle newParticle)
+    public int AddMana(ManaParticle newParticle)
     {
         incomingParticles.Add(newParticle);
+        return incomingParticles.Count;
     }
 
     public bool RemoveMana(ManaParticle particle)
@@ -52,9 +54,14 @@ public class ManaContainer : MonoBehaviour
 
     public void IncrementManaFlow()
     {
-        foreach (ManaParticle mp in manaParticles)
+        /*foreach (ManaParticle mp in manaParticles)
         {
-            TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY));
+            manaVisualizer.PrepareVisualization(TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY)));
+        }*/
+        for (int i = manaParticles.Count - 1; i >= 0; i--)
+        {
+            ManaParticle mp = manaParticles[i];
+            manaVisualizer.PrepareVisualization(TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY)));
         }
     }
 
@@ -67,14 +74,18 @@ public class ManaContainer : MonoBehaviour
         {
             manaParticles.Add(mp);
         }
+
+        manaVisualizer.EndTransition(manaParticles);
         incomingParticles.Clear();
     }
 
-    public void TransferManaParticle(ManaParticle particle, Tile target)
+    public ManaParticle TransferManaParticle(ManaParticle particle, Tile target)
     {
         if (RemoveMana(particle))
         {
-            target.AddMana(particle);
+            particle.nextOrb = target.AddMana(particle);
         }
+
+        return particle;
     }
 }
