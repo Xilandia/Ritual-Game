@@ -21,13 +21,24 @@ public class ManaContainer : MonoBehaviour
 
     public int AddMana(ManaParticle newParticle)
     {
-        incomingParticles.Add(newParticle);
-        return incomingParticles.Count;
-    }
+        // Look for an existing particle with the same ManaType.
+        for (int i = 0; i < incomingParticles.Count; i++)
+        {
+            if (incomingParticles[i].type == newParticle.type)
+            {
+                // Merge the quantities.
+                ManaParticle mergedParticle = incomingParticles[i];
+                mergedParticle.quantity += newParticle.quantity;
+                // Optionally, update any other properties if needed.
+                incomingParticles[i] = mergedParticle;
+                // Return the index of the merged particle.
+                return i;
+            }
+        }
 
-    public bool RemoveMana(ManaParticle particle)
-    {
-        return manaParticles.Remove(particle);
+        newParticle.nextOrb = incomingParticles.Count;
+        incomingParticles.Add(newParticle);
+        return incomingParticles.Count - 1;
     }
 
     public Dictionary<ManaType, int> GetAggregatedMana() // Format might not work with what I have in mind, will update later
@@ -54,13 +65,8 @@ public class ManaContainer : MonoBehaviour
 
     public void IncrementManaFlow()
     {
-        /*foreach (ManaParticle mp in manaParticles)
+        foreach (ManaParticle mp in manaParticles)
         {
-            manaVisualizer.PrepareVisualization(TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY)));
-        }*/
-        for (int i = manaParticles.Count - 1; i >= 0; i--)
-        {
-            ManaParticle mp = manaParticles[i];
             manaVisualizer.PrepareVisualization(TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY)));
         }
     }
@@ -69,6 +75,7 @@ public class ManaContainer : MonoBehaviour
     {
         // Handle overflow based on probability - soft cap
         // Handle other events
+        manaParticles.Clear();
 
         foreach (ManaParticle mp in incomingParticles)
         {
@@ -81,10 +88,7 @@ public class ManaContainer : MonoBehaviour
 
     public ManaParticle TransferManaParticle(ManaParticle particle, Tile target)
     {
-        if (RemoveMana(particle))
-        {
-            particle.nextOrb = target.AddMana(particle);
-        }
+        particle.nextOrb = target.AddMana(particle);
 
         return particle;
     }

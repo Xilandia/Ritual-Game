@@ -39,7 +39,7 @@ public class ManaVisualizer : MonoBehaviour
         {
             ManaVisualizer dmv = GridManager.Instance.GetTile(particle.particleX, particle.particleY).GetManaVisualizer();
 
-            particleDestinations.Add(dmv.orbStartPositions[(particle.nextOrb == -1? particle.prevOrb : particle.nextOrb) - 1]);
+            particleDestinations.Add(dmv.orbStartPositions[(particle.nextOrb == -1? particle.prevOrb : particle.nextOrb)]);
         }
     }
 
@@ -47,7 +47,6 @@ public class ManaVisualizer : MonoBehaviour
     {
         for (int i = 0; i < particleDestinations.Count; i++)
         {
-            // Interpolate between the start position and the destination.
             Vector3 startPos = orbStartPositions[i];
             Vector3 dest = particleDestinations[i];
             Vector3 newPos = Vector3.Lerp(startPos, dest, timeSinceStart);

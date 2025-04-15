@@ -63,7 +63,7 @@ public class ManaManager : MonoBehaviour
         {
             timeSinceStart += Time.deltaTime;
 
-            if (timeSinceStart >= 1f)
+            if (timeSinceStart >= 1.05f)
             {
                 isManaTransition = false;
                 timeSinceStart = 0f;
@@ -92,6 +92,23 @@ public class ManaManager : MonoBehaviour
             ManaParticle mp = new ManaParticle
             {
                 type = (ManaType) (manaGeneratedCount % 11),
+                quantity = manaGenerationRate,
+                particleX = x,
+                particleY = GridManager.Instance.height,
+                velocity = new Vector2(0, 0),
+                prevOrb = -1,
+                nextOrb = 0
+            };
+            GridManager.Instance.GetTile(x, GridManager.Instance.height).AddMana(mp);
+            manaGeneratedCount++;
+        }
+
+        for (int i = 0; i < 100; i++)
+        {
+            int x = Random.Range(0, GridManager.Instance.width);
+            ManaParticle mp = new ManaParticle
+            {
+                type = (ManaType)(manaGeneratedCount % 11),
                 quantity = manaGenerationRate,
                 particleX = x,
                 particleY = GridManager.Instance.height,

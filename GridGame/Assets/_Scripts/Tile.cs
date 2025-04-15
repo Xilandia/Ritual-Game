@@ -240,10 +240,10 @@ public class Tile : MonoBehaviour
         return manaContainer.AddMana(newParticle);
     }
 
-    public bool RemoveMana(ManaParticle particle)
+    /*public bool RemoveMana(ManaParticle particle) // If necessary, need to rework
     {
         return manaContainer.RemoveMana(particle);
-    }
+    }*/
 
     public ManaVisualizer GetManaVisualizer()
     {
