@@ -28,7 +28,7 @@ public class ManaVisualizer : MonoBehaviour
 
     public void PrepareVisualization(ManaParticle particle)
     {
-        if (particle.prevOrb == -1 || particle.prevOrb >= manaOrbs.Count)
+        if (particle.prevOrb == -1 || particle.prevOrb >= manaOrbs.Count || particle.nextOrb >= manaOrbs.Count)
         {
             return;
         }
