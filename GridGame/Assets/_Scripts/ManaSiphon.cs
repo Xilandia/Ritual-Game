@@ -15,4 +15,9 @@ public class ManaSiphon : MonoBehaviour, ManaFeature
     {
         
     }
+
+    public void ExecutePhase()
+    {
+
+    }
 }

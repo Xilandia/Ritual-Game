@@ -15,4 +15,9 @@ public class ManaFont : MonoBehaviour, ManaFeature
     {
         
     }
+
+    public void ExecutePhase()
+    {
+
+    }
 }

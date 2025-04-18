@@ -15,4 +15,9 @@ public class ManaRelay : MonoBehaviour, ManaFeature
     {
         
     }
+
+    public void ExecutePhase()
+    {
+
+    }
 }

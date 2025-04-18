@@ -13,6 +13,10 @@ public class ManaAspecter : MonoBehaviour, ManaFeature
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+    public void ExecutePhase()
+    {
+
     }
 }
