@@ -52,13 +52,10 @@ public class ManaFlowCalculator : MonoBehaviour
     private Vector2 ChooseFlowEquation(ManaParticle manaParticle)
     {
         Vector2 flow;
-        int x = manaParticle.particleX; 
-        int y = manaParticle.particleY;
-        int t = manaParticle.particleAge;
         int mult = manaParticle.inertia; 
         ManaType type = manaParticle.type;
 
-        /*switch (type)
+        switch (type)
         {
             case ManaType.Neutral:
                 flow = new Vector2(0.3f, 0.3f);
@@ -96,10 +93,8 @@ public class ManaFlowCalculator : MonoBehaviour
             default:
                 flow = new Vector2(0f, 0f);
                 break;
-        }*/
-        //Vector2 center = new Vector2(15, 15);
-        flow = LissajousFlow(x, y, t);
-        //Debug.Log(flow);
+        }
+
         return flow * mult;
     }
 

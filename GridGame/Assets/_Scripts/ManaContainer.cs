@@ -16,7 +16,7 @@ public class ManaContainer : MonoBehaviour
     void Start()
     {
         softCap = baseSoftCap; // TODO: Initialize soft cap based on aspects.
-        ManaManager.Instance.AddManaContainer(this);
+        ManaManager.Instance.AddManaContainer(this, tile);
     }
 
     public int AddMana(ManaParticle newParticle)

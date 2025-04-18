@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        manaManager.Init();
         gridManager.Init(width, height);
+        manaManager.Init();
         characterManager.Init();
         //itemHandler.Init();
     }

@@ -245,6 +245,11 @@ public class Tile : MonoBehaviour
         return manaContainer.RemoveMana(particle);
     }*/
 
+    public void AddManaFeature(ManaFeature newFeature)
+    {
+        feature = newFeature;
+    }
+
     public ManaVisualizer GetManaVisualizer()
     {
         return manaVisualizer;
