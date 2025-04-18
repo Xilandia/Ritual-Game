@@ -245,9 +245,109 @@ public class Tile : MonoBehaviour
         return manaContainer.RemoveMana(particle);
     }*/
 
-    public void AddManaFeature(ManaFeature newFeature)
+    public bool AddManaFeature(ManaFeature newFeature)
     {
+        if (behavior == TileBehavior.Border || feature != null)
+        {
+            return false;
+        }
+
         feature = newFeature;
+        return true;
+    }
+
+    public List<Tile> GetNeighborTiles()
+    {
+        List<Tile> neighborTiles = new List<Tile>();
+
+        if (North != null)
+        {
+            neighborTiles.Add(North);
+        }
+
+        if (NorthEast != null)
+        {
+            neighborTiles.Add(NorthEast);
+        }
+
+        if (East != null)
+        {
+            neighborTiles.Add(East);
+        }
+
+        if (SouthEast != null)
+        {
+            neighborTiles.Add(SouthEast);
+        }
+
+        if (South != null)
+        {
+            neighborTiles.Add(South);
+        }
+
+        if (SouthWest != null)
+        {
+            neighborTiles.Add(SouthWest);
+        }
+
+        if (West != null)
+        {
+            neighborTiles.Add(West);
+        }
+
+        if (NorthWest != null)
+        {
+            neighborTiles.Add(NorthWest);
+        }
+
+        return neighborTiles;
+    }
+
+    public List<ManaContainer> GetNeighborManaContainers()
+    {
+        List<ManaContainer> neighborContainers = new List<ManaContainer>();
+
+        if (North != null)
+        {
+            neighborContainers.Add(North.manaContainer);
+        }
+
+        if (NorthEast != null)
+        {
+            neighborContainers.Add(NorthEast.manaContainer);
+        }
+
+        if (East != null)
+        {
+            neighborContainers.Add(East.manaContainer);
+        }
+
+        if (SouthEast != null)
+        {
+            neighborContainers.Add(SouthEast.manaContainer);
+        }
+
+        if (South != null)
+        {
+            neighborContainers.Add(South.manaContainer);
+        }
+
+        if (SouthWest != null)
+        {
+            neighborContainers.Add(SouthWest.manaContainer);
+        }
+
+        if (West != null)
+        {
+            neighborContainers.Add(West.manaContainer);
+        }
+
+        if (NorthWest != null)
+        {
+            neighborContainers.Add(NorthWest.manaContainer);
+        }
+
+        return neighborContainers;
     }
 
     public ManaVisualizer GetManaVisualizer()

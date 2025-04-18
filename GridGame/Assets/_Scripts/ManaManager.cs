@@ -88,7 +88,7 @@ public class ManaManager : MonoBehaviour
 
     void PopulateManaFonts()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 12; i++)
         {
             int x = Random.Range(1, GridManager.Instance.width + 1);
             int y = Random.Range(1, GridManager.Instance.height + 1);
@@ -99,10 +99,17 @@ public class ManaManager : MonoBehaviour
                 tile.gameObject.AddComponent<ManaFont>();
                 ManaFont mf = tile.gameObject.GetComponent<ManaFont>();
                 mf.Init(tile, 1, 80);
-                tile.AddManaFeature(mf);
-                AddManaFeature(mf);
 
-                Debug.Log($"Mana Font has been added to ({x}, {y})");
+                if (tile.AddManaFeature(mf))
+                {
+                    Debug.Log($"Mana Font has been added to ({x}, {y})");
+                    AddManaFeature(mf);
+                }
+                else
+                {
+                    Destroy(mf);
+                    i--;
+                }
             }
             else
             {
@@ -122,7 +129,7 @@ public class ManaManager : MonoBehaviour
 
         foreach (ManaContainer mc in ManaContainers)
         {
-            mc.UpdateManaFlow();
+            mc.CheckManaCap();
         }
 
         foreach (ManaContainer mc in ManaContainers)

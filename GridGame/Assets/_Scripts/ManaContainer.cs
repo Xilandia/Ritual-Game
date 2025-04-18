@@ -12,6 +12,10 @@ public class ManaContainer : MonoBehaviour
     
     private List<ManaParticle> manaParticles = new List<ManaParticle>();
     private List<ManaParticle> incomingParticles = new List<ManaParticle>();
+    private List<ManaParticle> outgoingParticles = new List<ManaParticle>();
+    private int manaCount;
+    private int manaVolume; // separate for aspect calculation
+    private bool manaAdded;
 
     void Start()
     {
@@ -21,17 +25,17 @@ public class ManaContainer : MonoBehaviour
 
     public int AddMana(ManaParticle newParticle)
     {
-        // Look for an existing particle with the same ManaType.
+        manaCount += newParticle.quantity;
+        manaVolume += newParticle.quantity;
+        manaAdded = true;
+
         for (int i = 0; i < incomingParticles.Count; i++)
         {
             if (incomingParticles[i].type == newParticle.type)
             {
-                // Merge the quantities.
                 ManaParticle mergedParticle = incomingParticles[i];
                 mergedParticle.quantity += newParticle.quantity;
-                // Optionally, update any other properties if needed.
                 incomingParticles[i] = mergedParticle;
-                // Return the index of the merged particle.
                 return i;
             }
         }
@@ -54,28 +58,64 @@ public class ManaContainer : MonoBehaviour
         return aggregated;
     }
 
-    public void UpdateManaFlow()
+    public void CheckManaCap()
     {
-        for (int i = 0; i < manaParticles.Count; i++)
+        /*for (int i = 0; i < manaParticles.Count; i++)
         {
             ManaParticle mp = ManaFlowCalculator.Instance.CalculateManaFlow(tile, this, manaParticles[i]);
             manaParticles[i] = mp;
+        }*/
+
+        if (manaAdded && manaVolume > softCap)
+        {
+            float pBase = (float) (manaVolume - softCap) / manaCount;
+
+            for (int i = 0; i < manaParticles.Count; i++)
+            {
+                ManaParticle mp = manaParticles[i];
+
+                int leaving = 0;
+
+                for (int u = 0; u < mp.quantity; u++)
+                {
+                    if (Random.value < pBase) // Add mana type relations here (to pBase)
+                        leaving++;
+                }
+
+                if (leaving > 0)
+                {
+                    mp.quantity -= leaving;
+                    manaParticles[i] = mp;
+                    
+                    ManaParticle ejected = mp;
+                    ejected.quantity = leaving;
+
+                    TransferManaParticle(ejected);
+                }
+            }
         }
     }
 
     public void IncrementManaFlow()
     {
-        foreach (ManaParticle mp in manaParticles)
+        foreach (ManaParticle mp in outgoingParticles)
         {
-            manaVisualizer.PrepareVisualization(TransferManaParticle(mp, GridManager.Instance.GetTile(mp.particleX, mp.particleY)));
+            manaVisualizer.PrepareVisualization(mp);
         }
+
+        outgoingParticles.Clear();
     }
 
     public void HandleEvents()
     {
-        // Handle overflow based on probability - soft cap
         // Handle other events
-        manaParticles.Clear();
+        for (int i = manaParticles.Count - 1; i >= 0; i--)
+        {
+            if (manaParticles[i].quantity == 0)
+            {
+                manaParticles.RemoveAt(i);
+            }
+        }
 
         foreach (ManaParticle mp in incomingParticles)
         {
@@ -84,12 +124,19 @@ public class ManaContainer : MonoBehaviour
 
         manaVisualizer.EndTransition(manaParticles);
         incomingParticles.Clear();
+        manaAdded = false;
     }
 
-    public ManaParticle TransferManaParticle(ManaParticle particle, Tile target)
+    public void TransferManaParticle(ManaParticle particle)
     {
+        manaCount -= particle.quantity;
+        manaVolume -= particle.quantity;
+        Tile target = OddsMaker.Instance.DecideTarget(particle, tile);
+
+        particle.particleX = target.coordX;
+        particle.particleY = target.coordY;
         particle.nextOrb = target.AddMana(particle);
 
-        return particle;
+        outgoingParticles.Add(particle);
     }
 }
