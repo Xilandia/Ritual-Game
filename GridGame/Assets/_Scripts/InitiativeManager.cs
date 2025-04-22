@@ -40,9 +40,6 @@ public class InitiativeManager : MonoBehaviour
                 currentWait = 0f;
                 isPhaseDone = false;
             }
-            // Find a way to tell when current phase is done executing to call next phase
-            // NextPhase();
-            // ExecutePhase();
 
             if (currentWait < waitTime)
             {

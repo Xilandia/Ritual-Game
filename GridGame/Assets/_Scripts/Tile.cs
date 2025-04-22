@@ -9,7 +9,7 @@ public enum TileBehavior
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable;
+    [SerializeField] private GameObject highlight, clicklight, playerReachable, enemyReachable, manaParent;
     public int coordX { get; private set; }
     public int coordY { get; private set; }
 
@@ -23,6 +23,8 @@ public class Tile : MonoBehaviour
     public Tile NorthWest { get; set; }
 
     public TileBehavior behavior { get; set; }
+    [SerializeField] private ManaContainer manaContainer;
+    [SerializeField] private ManaVisualizer manaVisualizer;
     private IFeature feature;
     private ICharacter character;
     private IItem item;
@@ -226,6 +228,131 @@ public class Tile : MonoBehaviour
             transform.position = originalPosition; // Reset to ground level
             isBouncing = false;
         }
+    }
+
+    public int AddMana(ManaParticle newParticle)
+    {
+        if (behavior == TileBehavior.Border)
+        {
+            return -1;
+        }
+
+        return manaContainer.AddMana(newParticle);
+    }
+
+    /*public bool RemoveMana(ManaParticle particle) // If necessary, need to rework
+    {
+        return manaContainer.RemoveMana(particle);
+    }*/
+
+    public bool AddManaFeature(ManaFeature newFeature)
+    {
+        if (behavior == TileBehavior.Border || feature != null)
+        {
+            return false;
+        }
+
+        feature = newFeature;
+        return true;
+    }
+
+    public List<Tile> GetNeighborTiles()
+    {
+        List<Tile> neighborTiles = new List<Tile>();
+
+        if (North != null)
+        {
+            neighborTiles.Add(North);
+        }
+
+        if (NorthEast != null)
+        {
+            neighborTiles.Add(NorthEast);
+        }
+
+        if (East != null)
+        {
+            neighborTiles.Add(East);
+        }
+
+        if (SouthEast != null)
+        {
+            neighborTiles.Add(SouthEast);
+        }
+
+        if (South != null)
+        {
+            neighborTiles.Add(South);
+        }
+
+        if (SouthWest != null)
+        {
+            neighborTiles.Add(SouthWest);
+        }
+
+        if (West != null)
+        {
+            neighborTiles.Add(West);
+        }
+
+        if (NorthWest != null)
+        {
+            neighborTiles.Add(NorthWest);
+        }
+
+        return neighborTiles;
+    }
+
+    public List<ManaContainer> GetNeighborManaContainers()
+    {
+        List<ManaContainer> neighborContainers = new List<ManaContainer>();
+
+        if (North != null)
+        {
+            neighborContainers.Add(North.manaContainer);
+        }
+
+        if (NorthEast != null)
+        {
+            neighborContainers.Add(NorthEast.manaContainer);
+        }
+
+        if (East != null)
+        {
+            neighborContainers.Add(East.manaContainer);
+        }
+
+        if (SouthEast != null)
+        {
+            neighborContainers.Add(SouthEast.manaContainer);
+        }
+
+        if (South != null)
+        {
+            neighborContainers.Add(South.manaContainer);
+        }
+
+        if (SouthWest != null)
+        {
+            neighborContainers.Add(SouthWest.manaContainer);
+        }
+
+        if (West != null)
+        {
+            neighborContainers.Add(West.manaContainer);
+        }
+
+        if (NorthWest != null)
+        {
+            neighborContainers.Add(NorthWest.manaContainer);
+        }
+
+        return neighborContainers;
+    }
+
+    public ManaVisualizer GetManaVisualizer()
+    {
+        return manaVisualizer;
     }
 
     public void DebugStatus()
