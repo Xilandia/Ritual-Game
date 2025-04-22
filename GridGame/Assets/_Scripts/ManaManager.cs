@@ -7,8 +7,8 @@ public class ManaManager : MonoBehaviour
     [SerializeField] private List<ManaContainer> ManaContainers = new List<ManaContainer>();
     [SerializeField] private List<ManaVisualizer> ManaVisualizers = new List<ManaVisualizer>();
     [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>();
-    [SerializeField] private int manaGenerationRate = 5; // How much mana is generated per Tile per tick
-    [SerializeField] private int manaGeneratedCount; // How many tiles around the tile can generate mana
+    [SerializeField] private int manaGenerationRate = 6; // How much mana is generated per Tile per tick
+    [SerializeField] private int manaGeneratedCount; // Count of mana particles generated for debugging purposes
 
     private bool isManaTransition = false;
     private float timeSinceStart = 0f;
@@ -35,7 +35,7 @@ public class ManaManager : MonoBehaviour
 
         if (tile.behavior != TileBehavior.Border)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 int randomIndex = Random.Range(0, manaTypes.Count);
                 ManaParticle mp = new ManaParticle

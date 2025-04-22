@@ -36,13 +36,36 @@ public class ManaContainer : MonoBehaviour
                 ManaParticle mergedParticle = incomingParticles[i];
                 mergedParticle.quantity += newParticle.quantity;
                 incomingParticles[i] = mergedParticle;
-                return i;
+                return mergedParticle.nextOrb;
             }
         }
 
-        newParticle.nextOrb = incomingParticles.Count;
+        int nextOrb = -1;
+
+        for (int i = 0; i < manaParticles.Count; i++)
+        {
+            if (manaParticles[i].type == newParticle.type)
+            {
+                nextOrb = i;
+                break;
+            }
+        }
+
+        if (nextOrb == -1)
+        {
+            nextOrb = incomingParticles.Count + 1;
+        }
+
+        newParticle.nextOrb = nextOrb;
+
+        if (newParticle.prevOrb == -1)
+        {
+            newParticle.prevOrb = newParticle.nextOrb;
+        }
+
         incomingParticles.Add(newParticle);
-        return incomingParticles.Count - 1;
+
+        return nextOrb;
     }
 
     public Dictionary<ManaType, int> GetAggregatedMana() // Format might not work with what I have in mind, will update later
@@ -60,15 +83,9 @@ public class ManaContainer : MonoBehaviour
 
     public void CheckManaCap()
     {
-        /*for (int i = 0; i < manaParticles.Count; i++)
-        {
-            ManaParticle mp = ManaFlowCalculator.Instance.CalculateManaFlow(tile, this, manaParticles[i]);
-            manaParticles[i] = mp;
-        }*/
-
         if (manaAdded && manaVolume > softCap)
         {
-            float pBase = (float) (manaVolume - softCap) / manaCount;
+            float pBase = (float) (manaVolume - softCap) / manaCount * 1.2f;
 
             for (int i = 0; i < manaParticles.Count; i++)
             {
@@ -119,7 +136,24 @@ public class ManaContainer : MonoBehaviour
 
         foreach (ManaParticle mp in incomingParticles)
         {
-            manaParticles.Add(mp);
+            bool alreadyAdded = false;
+
+            for (int i = 0; i < manaParticles.Count; i++)
+            {
+                if (manaParticles[i].type == mp.type)
+                {
+                    ManaParticle mergedParticle = manaParticles[i];
+                    mergedParticle.quantity += mp.quantity;
+                    manaParticles[i] = mergedParticle;
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+
+            if (!alreadyAdded)
+            {
+                manaParticles.Add(mp);
+            }
         }
 
         manaVisualizer.EndTransition(manaParticles);
@@ -135,6 +169,7 @@ public class ManaContainer : MonoBehaviour
 
         particle.particleX = target.coordX;
         particle.particleY = target.coordY;
+        particle.prevOrb = particle.nextOrb;
         particle.nextOrb = target.AddMana(particle);
 
         outgoingParticles.Add(particle);
