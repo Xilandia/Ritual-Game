@@ -5,7 +5,6 @@ using UnityEngine;
 public class ManaVisualizer : MonoBehaviour
 {
     [SerializeField] private ManaContainer manaContainer;
-    [SerializeField] private GameObject movingParticlePrefab;
     [SerializeField] private List<GameObject> manaOrbs;
     [SerializeField] private List<MeshRenderer> orbMeshRenderers;
     [SerializeField] private List<Material> manaMaterials;
@@ -38,8 +37,9 @@ public class ManaVisualizer : MonoBehaviour
         if (particle.prevOrb < 9)
         {
             ManaVisualizer dmv = GridManager.Instance.GetTile(particle.particleX, particle.particleY).GetManaVisualizer();
+            GameObject movingParticle = MovingManaParticlePool.Instance.Get();
 
-            GameObject movingParticle = Instantiate(movingParticlePrefab, orbStartPositions[particle.prevOrb], Quaternion.identity);
+            movingParticle.transform.position = orbStartPositions[particle.prevOrb];
             movingParticle.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f) * particle.quantity / 5;
             movingParticle.gameObject.GetComponent<MeshRenderer>().material = manaMaterials[(int)particle.type];
             movingParticles.Add(movingParticle);
@@ -63,7 +63,7 @@ public class ManaVisualizer : MonoBehaviour
     {
         foreach (GameObject movingParticle in movingParticles)
         {
-            Destroy(movingParticle);
+            MovingManaParticlePool.Instance.Release(movingParticle);
         }
 
         movingParticles.Clear();
