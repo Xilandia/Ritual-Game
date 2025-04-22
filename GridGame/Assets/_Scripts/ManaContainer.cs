@@ -1,6 +1,8 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ManaContainer : MonoBehaviour
 {
@@ -83,35 +85,65 @@ public class ManaContainer : MonoBehaviour
 
     public void CheckManaCap()
     {
-        if (manaAdded && manaVolume > softCap)
+        if (!(manaAdded && manaVolume > softCap))
+            return;
+
+        // 1) Compute base ejection probability
+        float pBase = (float)(manaVolume - softCap) / manaCount;
+
+        // 2) Fetch the relation entry for this particle type
+        //    Here we're inside the loop per‐particle below, so this moves inside it.
+
+        // 3) Loop over each particle and decide how many units leave
+        for (int i = manaParticles.Count - 1; i >= 0; i--)
         {
-            float pBase = (float) (manaVolume - softCap) / manaCount * 1.2f;
+            ManaParticle mp = manaParticles[i];
 
-            for (int i = 0; i < manaParticles.Count; i++)
+            // Start with the global base probability
+            float p = pBase;
+
+            // Try to get type‐relation rules for this particle's type
+            if (ManaTypeRelationDB.Instance.Dict.TryGetValue(mp.type, out var relation))
             {
-                ManaParticle mp = manaParticles[i];
+                // Aggregate this container's current mana by type
+                var agg = GetAggregatedMana();
 
-                int leaving = 0;
+                // Increase p for “positive” neighbor types present in this container
+                foreach (var pos in relation.positiveTypes)
+                    if (agg.TryGetValue(pos.type, out int qPos))
+                        p += pos.weight * qPos / 2;
 
-                for (int u = 0; u < mp.quantity; u++)
-                {
-                    if (Random.value < pBase) // Add mana type relations here (to pBase)
-                        leaving++;
-                }
+                // Decrease p for “negative” types
+                foreach (var neg in relation.negativeTypes)
+                    if (agg.TryGetValue(neg.type, out int qNeg))
+                        p -= neg.weight * qNeg / 2;
+            }
 
-                if (leaving > 0)
-                {
-                    mp.quantity -= leaving;
-                    manaParticles[i] = mp;
-                    
-                    ManaParticle ejected = mp;
-                    ejected.quantity = leaving;
+            // Clamp into [0.05,1]
+            p = Mathf.Clamp(p, 0.03f, 1f);
 
-                    TransferManaParticle(ejected);
-                }
+            // Now roll once per unit
+            int leaving = 0;
+
+            for (int u = 0; u < mp.quantity; u++)
+                if (Random.value < p)
+                    leaving++;
+
+            if (leaving > 0)
+            {
+                // Subtract the leaving units
+                mp.quantity -= leaving;
+                manaParticles[i] = mp;
+
+                // Spawn the “ejected” particle and send it on its way
+                ManaParticle ejected = mp;
+                ejected.quantity = leaving;
+
+                TransferManaParticle(ejected);
             }
         }
     }
+
 
     public void IncrementManaFlow()
     {
