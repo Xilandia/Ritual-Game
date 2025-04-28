@@ -26,4 +26,5 @@ public interface ICharacter
 
     float GetDamageMultiplier();
     void TakeDamage(int damage);
+    int GetConversionCapacity();
 }

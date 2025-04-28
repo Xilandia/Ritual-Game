@@ -6,7 +6,8 @@ public class ManaManager : MonoBehaviour
 {
     [SerializeField] private List<ManaContainer> ManaContainers = new List<ManaContainer>();
     [SerializeField] private List<ManaVisualizer> ManaVisualizers = new List<ManaVisualizer>();
-    [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>();
+    [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>(); // can't be serialized
+    [SerializeField] private List<ActiveRitual> ActiveRituals = new List<ActiveRitual>();
     [SerializeField] private int manaGenerationRate; // How much mana is generated per Tile per tick
     [SerializeField] private int manaGeneratedCount; // Count of mana particles generated for debugging purposes
 
@@ -86,6 +87,16 @@ public class ManaManager : MonoBehaviour
         ManaFeatures.Remove(manaFeature);
     }
 
+    public void AddActiveRitual(ActiveRitual activeRitual)
+    {
+        ActiveRituals.Add(activeRitual);
+    }
+
+    public void RemoveActiveRitual(ActiveRitual activeRitual)
+    {
+        ActiveRituals.Remove(activeRitual);
+    }
+
     void PopulateManaFonts()
     {
         for (int i = 0; i < 12; i++)
@@ -155,6 +166,11 @@ public class ManaManager : MonoBehaviour
                 foreach (ManaContainer mc in ManaContainers)
                 {
                     mc.HandleEvents();
+                }
+
+                foreach (ActiveRitual ar in ActiveRituals)
+                {
+                    ar.ChargeRitual();
                 }
 
                 InitiativeManager.Instance.NextPhase();

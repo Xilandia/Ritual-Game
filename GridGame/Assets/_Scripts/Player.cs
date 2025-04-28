@@ -120,4 +120,8 @@ public class Player : MonoBehaviour, ICharacter
         }
     }
 
+    public int GetConversionCapacity()
+    {
+        return 10; // Add stat based calculation
+    }
 }
