@@ -6,6 +6,10 @@ public class OddsMaker : MonoBehaviour
 {
     public static OddsMaker Instance { get; private set; }
 
+    private List<ManaContainer> neighborContainers = new List<ManaContainer>();
+    private List<Tile> neighborTiles = new List<Tile>();
+    private Tile currentTile;
+
     private void Awake()
     {
         Instance = this;
@@ -21,9 +25,12 @@ public class OddsMaker : MonoBehaviour
             return fallback[Random.Range(0, fallback.Count)];
         }
 
-        // 2) Get neighbors (assumed in N, NE, E, SE, S, SW, W, NW order)
-        var neighborContainers = tile.GetNeighborManaContainers();
-        var neighborTiles = tile.GetNeighborTiles();
+        if (currentTile == null || tile != currentTile) // if first run or moving to new tile, get neighbors
+        {
+            currentTile = tile;
+            neighborContainers = tile.GetNeighborManaContainers();
+            neighborTiles = tile.GetNeighborTiles();
+        }
 
         // 3) Prepare weights
         float[] dirWeights = new float[8];

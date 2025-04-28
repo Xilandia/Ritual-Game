@@ -52,7 +52,7 @@ public class ManaVisualizer : MonoBehaviour
     {
         for (int i = 0; i < movingParticles.Count; i++)
         {
-            Vector3 startPos = orbStartPositions[i];
+            Vector3 startPos = particleOrigins[i];
             Vector3 dest = particleDestinations[i];
             Vector3 newPos = Vector3.Lerp(startPos, dest, timeSinceStart);
             movingParticles[i].transform.position = newPos;

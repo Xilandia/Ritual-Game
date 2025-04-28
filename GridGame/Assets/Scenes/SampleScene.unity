@@ -650,7 +650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ManaContainers: []
   ManaVisualizers: []
-  manaGenerationRate: 2
+  manaGenerationRate: 6
   manaGeneratedCount: 0
 --- !u!1 &414147698
 GameObject:
@@ -1158,7 +1158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movingParticlePrefab: {fileID: 7874911010510542277, guid: 61bbf7601a5e838409324069a2787dca, type: 3}
-  initialPoolSize: 500
+  initialPoolSize: 5000
 --- !u!1 &1040700874
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,11 +7,11 @@ public class ManaManager : MonoBehaviour
     [SerializeField] private List<ManaContainer> ManaContainers = new List<ManaContainer>();
     [SerializeField] private List<ManaVisualizer> ManaVisualizers = new List<ManaVisualizer>();
     [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>();
-    [SerializeField] private int manaGenerationRate = 6; // How much mana is generated per Tile per tick
+    [SerializeField] private int manaGenerationRate; // How much mana is generated per Tile per tick
     [SerializeField] private int manaGeneratedCount; // Count of mana particles generated for debugging purposes
 
-    private bool isManaTransition = false;
-    private float timeSinceStart = 0f;
+    private bool isManaTransition;
+    private float timeSinceStart;
 
     private List<int> manaTypes = new List<int>
     {

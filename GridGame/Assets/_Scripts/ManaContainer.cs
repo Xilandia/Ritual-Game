@@ -27,8 +27,6 @@ public class ManaContainer : MonoBehaviour
 
     public int AddMana(ManaParticle newParticle)
     {
-        manaCount += newParticle.quantity;
-        manaVolume += newParticle.quantity;
         manaAdded = true;
 
         for (int i = 0; i < incomingParticles.Count; i++)
@@ -88,41 +86,32 @@ public class ManaContainer : MonoBehaviour
         if (!(manaAdded && manaVolume > softCap))
             return;
 
-        // 1) Compute base ejection probability
         float pBase = (float)(manaVolume - softCap) / manaCount;
+        Dictionary<int, int> ejectedParticles = new Dictionary<int, int>();
 
-        // 2) Fetch the relation entry for this particle type
-        //    Here we're inside the loop per‐particle below, so this moves inside it.
-
-        // 3) Loop over each particle and decide how many units leave
-        for (int i = manaParticles.Count - 1; i >= 0; i--)
+        for (int i = 0; i < manaParticles.Count; i++)
         {
             ManaParticle mp = manaParticles[i];
-
-            // Start with the global base probability
+            
             float p = pBase;
-
-            // Try to get type‐relation rules for this particle's type
+            float weightModifier = 0f;
+            
             if (ManaTypeRelationDB.Instance.Dict.TryGetValue(mp.type, out var relation))
             {
-                // Aggregate this container's current mana by type
                 var agg = GetAggregatedMana();
 
-                // Increase p for “positive” neighbor types present in this container
                 foreach (var pos in relation.positiveTypes)
                     if (agg.TryGetValue(pos.type, out int qPos))
-                        p += pos.weight * qPos / 2;
-
-                // Decrease p for “negative” types
+                        weightModifier -= pos.weight / 5 * qPos;
+                
                 foreach (var neg in relation.negativeTypes)
                     if (agg.TryGetValue(neg.type, out int qNeg))
-                        p -= neg.weight * qNeg / 2;
+                        weightModifier += neg.weight / 5 * qNeg;
             }
 
-            // Clamp into [0.05,1]
+            p *= (1 + weightModifier / 100);
             p = Mathf.Clamp(p, 0.03f, 1f);
-
-            // Now roll once per unit
+            
             int leaving = 0;
 
             for (int u = 0; u < mp.quantity; u++)
@@ -130,17 +119,21 @@ public class ManaContainer : MonoBehaviour
                     leaving++;
 
             if (leaving > 0)
-            {
-                // Subtract the leaving units
-                mp.quantity -= leaving;
-                manaParticles[i] = mp;
+                ejectedParticles.Add(i, leaving);
+        }
 
-                // Spawn the “ejected” particle and send it on its way
-                ManaParticle ejected = mp;
-                ejected.quantity = leaving;
+        foreach (KeyValuePair<int, int> kvp in ejectedParticles)
+        {
+            ManaParticle mp = manaParticles[kvp.Key];
 
-                TransferManaParticle(ejected);
-            }
+            mp.quantity -= kvp.Value;
+            manaCount -= kvp.Value;
+            manaVolume -= kvp.Value;
+            manaParticles[kvp.Key] = mp;
+
+            ManaParticle ejected = mp;
+            ejected.quantity = kvp.Value;
+            TransferManaParticle(ejected);
         }
     }
 
@@ -166,6 +159,11 @@ public class ManaContainer : MonoBehaviour
             }
         }
 
+        if (incomingParticles.Count == 0)
+        {
+            manaAdded = false;
+        }
+
         foreach (ManaParticle mp in incomingParticles)
         {
             bool alreadyAdded = false;
@@ -188,9 +186,17 @@ public class ManaContainer : MonoBehaviour
             }
         }
 
+        manaCount = 0;
+        manaVolume = 0;
+
+        foreach (ManaParticle mp in manaParticles)
+        {
+            manaCount += mp.quantity;
+            manaVolume += mp.quantity;
+        }
+
         manaVisualizer.EndTransition(manaParticles);
         incomingParticles.Clear();
-        manaAdded = false;
     }
 
     public void TransferManaParticle(ManaParticle particle)
