@@ -7,6 +7,9 @@ public class Player : MonoBehaviour, ICharacter
     [SerializeField] private Tile currentTile;
     [SerializeField] private int movementRange = 3;
     [SerializeField] private int health = 20;
+    [SerializeField] private RitualCostOrder ritualCostOrder;
+    [SerializeField] private ActiveRitual activeRitual;
+
     public string Name { get; private set; }
     public StatBlock stats { get; private set; }
     public List<IItem> inventory { get; private set; }
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour, ICharacter
         stats.Health = health;
         stats.MaxHealth = health;
         stats.Strength = 5;
+        activeRitual.RegisterRitual(this);
     }
 
     public Tile GetCurrentTile()
@@ -123,5 +127,19 @@ public class Player : MonoBehaviour, ICharacter
     public int GetConversionCapacity()
     {
         return 10; // Add stat based calculation
+    }
+
+    public void StartRitual()
+    {
+        Dictionary<ManaType, int> manaCost = new Dictionary<ManaType, int>
+        {
+            { ManaType.Fire, 10 },
+            { ManaType.Water, 10 },
+            { ManaType.Earth, 10 }
+        };
+
+        ritualCostOrder.StartChargingRitual(manaCost);
+
+        Debug.Log("Ritual started");
     }
 }

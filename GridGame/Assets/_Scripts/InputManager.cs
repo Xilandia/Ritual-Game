@@ -16,9 +16,9 @@ public class InputManager : MonoBehaviour
             GridManager.Instance.CharacterUseItem();
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            //GridManager.Instance.CharacterInteract();
+            GridManager.Instance.CharacterStartRitual();
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))

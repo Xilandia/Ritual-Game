@@ -201,8 +201,6 @@ public class ManaContainer : MonoBehaviour
 
     public void TransferManaParticle(ManaParticle particle)
     {
-        manaCount -= particle.quantity;
-        manaVolume -= particle.quantity;
         Tile target = OddsMaker.Instance.DecideTarget(particle, tile);
 
         particle.particleX = target.coordX;
@@ -211,5 +209,31 @@ public class ManaContainer : MonoBehaviour
         particle.nextOrb = target.AddMana(particle);
 
         outgoingParticles.Add(particle);
+    }
+
+    public int ExtractMana(ManaType type, int amount, Tile tile)
+    {
+        for (int i = 0; i < manaParticles.Count; i++)
+        {
+            if (manaParticles[i].type == type)
+            {
+                int available = manaParticles[i].quantity;
+                int taken = Mathf.Min(available, amount);
+
+                ManaParticle mp = manaParticles[i];
+                mp.quantity -= taken;
+                manaParticles[i] = mp;
+                manaCount -= taken;
+                manaVolume -= taken;
+                //visualize extraction of mana
+                return taken;
+            }
+        }
+        return 0;
+    }
+
+    public int GetManaGap()
+    {
+        return Mathf.Max(0, softCap - manaCount);
     }
 }

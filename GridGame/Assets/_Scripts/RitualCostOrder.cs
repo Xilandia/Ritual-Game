@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class RitualCostOrder : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private ActiveRitual ritual;
+    [SerializeField] private Player caster;
+
+    public void StartChargingRitual(Dictionary<ManaType, int> manaCost)
     {
-        
+        ritual.PlugInOrder(manaCost);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RitualCharged()
     {
-        
+        // Perform the ritual
+        Debug.Log("Ritual Charged");
     }
 }

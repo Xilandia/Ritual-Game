@@ -254,6 +254,14 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void CharacterStartRitual()
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterStartRitual();
+        }
+    }
+
     public void CharacterTurn(CharacterFaceDirection direction)
     {
         if (selectedTile.TileHasCharacter())
