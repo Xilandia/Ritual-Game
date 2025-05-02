@@ -12,7 +12,7 @@ public struct ManaParticle
 {
     public ManaType type;
     // public ManaAspects aspect;
-    public int quantity;
+    public float quantity;
     public int particleAge;
     public int particleX;
     public int particleY;
