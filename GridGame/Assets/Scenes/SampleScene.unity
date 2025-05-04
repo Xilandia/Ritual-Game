@@ -746,8 +746,9 @@ GameObject:
   m_Component:
   - component: {fileID: 607395103}
   - component: {fileID: 607395104}
+  - component: {fileID: 607395105}
   m_Layer: 0
-  m_Name: Mana Type Relations Database
+  m_Name: Mana Type Databases
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -792,6 +793,30 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 056146ebc0a164e4f9038feba367c937, type: 2}
   - {fileID: 11400000, guid: e83500a90fef2044d95fabeea43caf47, type: 2}
   - {fileID: 11400000, guid: a69079ec37d0b1742bb243f3584457bc, type: 2}
+--- !u!114 &607395105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607395102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31adf7968537b1548ab15f8c0c3eb156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  relations:
+  - {fileID: 11400000, guid: 1cf5830125da1ca458be7c5d6abd858e, type: 2}
+  - {fileID: 11400000, guid: bf863c32cdf528649be2b1c1230f09f9, type: 2}
+  - {fileID: 11400000, guid: fcdd5f5a20f24364babaf12acb3322ed, type: 2}
+  - {fileID: 11400000, guid: c82206a0348aadb4c9fceee2159c80e9, type: 2}
+  - {fileID: 11400000, guid: 058e37fd85cc1df488908e3f9aa72192, type: 2}
+  - {fileID: 11400000, guid: 1d3b8385d971b5840ab851810bea0e7b, type: 2}
+  - {fileID: 11400000, guid: 630d2ac4852a9054fb0699814d6c3f01, type: 2}
+  - {fileID: 11400000, guid: 8e0e3490d7cb964429abbaed878d2693, type: 2}
+  - {fileID: 11400000, guid: e8fe34d35cffc784baf13146ff749fa8, type: 2}
+  - {fileID: 11400000, guid: 8e607b037069ce244aeb494bfaa712c3, type: 2}
+  - {fileID: 11400000, guid: db5d5be581d77ff4c88274bbb85d31a3, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

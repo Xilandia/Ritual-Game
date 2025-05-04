@@ -43,11 +43,8 @@ public class ManaManager : MonoBehaviour
                 {
                     type = (ManaType)manaTypes[randomIndex],
                     quantity = manaGenerationRate,
-                    particleAge = 0,
                     particleX = tile.coordX,
                     particleY = tile.coordY,
-                    inertia = 1,
-                    velocity = new Vector2(0, 0),
                     prevOrb = -1,
                     nextOrb = 0
                 };
@@ -194,11 +191,8 @@ public class ManaManager : MonoBehaviour
             {
                 type = (ManaType) (manaGeneratedCount % 11),
                 quantity = manaGenerationRate,
-                particleAge = 0,
                 particleX = x,
                 particleY = 16,
-                inertia = 1,
-                velocity = new Vector2(0, 0),
                 prevOrb = -1,
                 nextOrb = 0
             };
@@ -213,11 +207,8 @@ public class ManaManager : MonoBehaviour
             {
                 type = (ManaType)(manaGeneratedCount % 11),
                 quantity = manaGenerationRate,
-                particleAge = 0,
                 particleX = x,
                 particleY = 16,
-                inertia = 1,
-                velocity = new Vector2(0, 0),
                 prevOrb = -1,
                 nextOrb = 0
             };
