@@ -218,6 +218,18 @@ public class ManaContainer : MonoBehaviour
         outgoingParticles.Add(particle);
     }
 
+    public int GetQuantityOf(ManaType type)
+    {
+        for (int i = 0; i < manaParticles.Count; i++)
+        {
+            if (manaParticles[i].type == type)
+            {
+                return Mathf.FloorToInt(manaParticles[i].quantity);
+            }
+        }
+        return 0;
+    }
+
     public int ExtractMana(ManaType type, int amount, Tile tile)
     {
         for (int i = 0; i < manaParticles.Count; i++)

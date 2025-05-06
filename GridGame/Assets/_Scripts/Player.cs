@@ -133,9 +133,9 @@ public class Player : MonoBehaviour, ICharacter
     {
         Dictionary<ManaType, int> manaCost = new Dictionary<ManaType, int>
         {
-            { ManaType.Fire, 10 },
-            { ManaType.Water, 10 },
-            { ManaType.Earth, 10 }
+            { ManaType.Fire, 300 },
+            { ManaType.Water, 300 },
+            { ManaType.Metal, 300 }
         };
 
         ritualCostOrder.StartChargingRitual(manaCost);

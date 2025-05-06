@@ -49,10 +49,12 @@ public class ActiveRitual : MonoBehaviour
         {
             // Process tick
             CasterWillRange++;
+            Debug.Log($"Grab range: {CasterWillRange}, now grabbing.");
             // Grab and fill mana
-            GrabMana();
+            FillMana(GrabMana());
             // Convert and fill mana
-            FillMana(ManaConverter.Instance.ConvertMana(manaMissing, caster.GetConversionCapacity(),
+            Debug.Log($"Converting mana.");
+            FillMana(ManaConverter.Instance.ConvertMana(manaMissing, caster.GetConversionCapacity() * 10,
                 caster.GetCurrentTile()));
             // Check if ritual is charged
             bool isCharged = true;
@@ -63,6 +65,10 @@ public class ActiveRitual : MonoBehaviour
                 {
                     isCharged = false;
                     break;
+                }
+                else
+                {
+                    Debug.Log($"{kvp.Key} obtained.");
                 }
             }
 
@@ -75,7 +81,7 @@ public class ActiveRitual : MonoBehaviour
         }
     }
 
-    private void GrabMana()
+    private Dictionary<ManaType, int> GrabMana()
     {
         Dictionary<ManaType, int> grabbedMana = new Dictionary<ManaType, int>();
 
@@ -100,13 +106,13 @@ public class ActiveRitual : MonoBehaviour
                 ManaType type = kvp.Key;
                 int needed = kvp.Value;
 
-                int taken = container.ExtractMana(type, needed, origin);
+                if (!grabbedMana.ContainsKey(type))
+                    grabbedMana[type] = 0;
+
+                int taken = container.ExtractMana(type, needed - grabbedMana[type], origin);
                 if (taken > 0)
                 {
-                    if (!grabbedMana.ContainsKey(type))
-                        grabbedMana[type] = 0;
                     grabbedMana[type] += taken;
-                    Debug.Log($"I took {taken} of type {type} from {container}");
                 }
             }
 
@@ -121,7 +127,7 @@ public class ActiveRitual : MonoBehaviour
             }
         }
 
-        FillMana(grabbedMana);
+        return grabbedMana;
         // Moves mana of relevant types from further away (2x CasterWillRange) closer to the caster - maybe? Need to decide if and how to implement this
     }
 
@@ -135,6 +141,8 @@ public class ActiveRitual : MonoBehaviour
             {
                 manaContained[type] += amount;
                 manaMissing[type] -= amount;
+
+                Debug.Log($"Charging: {type} by {amount}, missing {manaMissing[type]} out of {manaCosts[type]} needed ({manaContained[type]} contained)");
             }
         }
     }
