@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3643481103073542688}
   - component: {fileID: 9155959433909250864}
+  - component: {fileID: 263012027462363494}
+  - component: {fileID: 7624543131515580685}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -49,6 +51,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTile: {fileID: 0}
   movementRange: 3
+  health: 20
+  ritualCostOrder: {fileID: 263012027462363494}
+  activeRitual: {fileID: 7624543131515580685}
+--- !u!114 &263012027462363494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438488667869109114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b792667c0a547814982ee4037c6fa7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ritual: {fileID: 7624543131515580685}
+  caster: {fileID: 9155959433909250864}
+--- !u!114 &7624543131515580685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438488667869109114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40292ac7c82acf04cbd202a0f90394fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  costOrder: {fileID: 263012027462363494}
+  CasterWillRange: 0
 --- !u!1 &804747461344929272
 GameObject:
   m_ObjectHideFlags: 0

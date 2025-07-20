@@ -140,22 +140,6 @@ public class GridManager : MonoBehaviour
         tileGrid[5, 1].AssignItem(ItemHandler.Instance.CreateItem("Rapier"));
     }
 
-
-    void XYTest()
-    {
-        tileGrid[1, 2].GetComponent<Renderer>().material = blockedMaterial;
-        tileGrid[1, 3].GetComponent<Renderer>().material = blockedMaterial;
-        tileGrid[2, 4].GetComponent<Renderer>().material = blockedMaterial;
-        tileGrid[5, 4].GetComponent<Renderer>().material = blockedMaterial;
-
-        for (int i = 7; i < 10; i++)
-        {
-            for (int j = 7; j < 9; j++)
-            {
-                tileGrid[i, j].GetComponent<Renderer>().material = blockedMaterial;
-            }
-        }
-    }
     public void PlaceCharacter(ICharacter character, int x, int y)
     {
         if (tileGrid[x, y].behavior == TileBehavior.Passable)
@@ -254,6 +238,14 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void CharacterStartRitual()
+    {
+        if (selectedTile.TileHasCharacter())
+        {
+            selectedTile.CharacterStartRitual();
+        }
+    }
+
     public void CharacterTurn(CharacterFaceDirection direction)
     {
         if (selectedTile.TileHasCharacter())
@@ -266,6 +258,36 @@ public class GridManager : MonoBehaviour
     {
         return tileGrid[x, y];
     }
+
+    public List<Tile> GetTilesInRadius(int range, Tile startTile)
+    {
+        List<Tile> results = new List<Tile>();
+        HashSet<Tile> visited = new HashSet<Tile>();
+        Queue<(Tile tile, int dist)> frontier = new Queue<(Tile, int)>();
+
+        frontier.Enqueue((startTile, 0));
+        visited.Add(startTile);
+
+        while (frontier.Count > 0)
+        {
+            var (tile, dist) = frontier.Dequeue();
+            if (dist > range) continue;
+
+            results.Add(tile);
+
+            foreach (Tile neighbor in tile.GetNeighborTiles())
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    frontier.Enqueue((neighbor, dist + 1));
+                    visited.Add(neighbor);
+                }
+            }
+        }
+
+        return results;
+    }
+
 
     /*public Tile GetSelectedTile() // Might be needed, but not sure yet
     {

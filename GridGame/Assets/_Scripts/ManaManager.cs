@@ -6,7 +6,8 @@ public class ManaManager : MonoBehaviour
 {
     [SerializeField] private List<ManaContainer> ManaContainers = new List<ManaContainer>();
     [SerializeField] private List<ManaVisualizer> ManaVisualizers = new List<ManaVisualizer>();
-    [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>();
+    [SerializeField] private List<ManaFeature> ManaFeatures = new List<ManaFeature>(); // can't be serialized
+    [SerializeField] private List<ActiveRitual> ActiveRituals = new List<ActiveRitual>();
     [SerializeField] private int manaGenerationRate; // How much mana is generated per Tile per tick
     [SerializeField] private int manaGeneratedCount; // Count of mana particles generated for debugging purposes
 
@@ -42,11 +43,8 @@ public class ManaManager : MonoBehaviour
                 {
                     type = (ManaType)manaTypes[randomIndex],
                     quantity = manaGenerationRate,
-                    particleAge = 0,
                     particleX = tile.coordX,
                     particleY = tile.coordY,
-                    inertia = 1,
-                    velocity = new Vector2(0, 0),
                     prevOrb = -1,
                     nextOrb = 0
                 };
@@ -84,6 +82,16 @@ public class ManaManager : MonoBehaviour
     public void RemoveManaFeature(ManaFeature manaFeature)
     {
         ManaFeatures.Remove(manaFeature);
+    }
+
+    public void AddActiveRitual(ActiveRitual activeRitual)
+    {
+        ActiveRituals.Add(activeRitual);
+    }
+
+    public void RemoveActiveRitual(ActiveRitual activeRitual)
+    {
+        ActiveRituals.Remove(activeRitual);
     }
 
     void PopulateManaFonts()
@@ -157,6 +165,11 @@ public class ManaManager : MonoBehaviour
                     mc.HandleEvents();
                 }
 
+                foreach (ActiveRitual ar in ActiveRituals)
+                {
+                    ar.ChargeRitual();
+                }
+
                 InitiativeManager.Instance.NextPhase();
             }
             else
@@ -178,11 +191,8 @@ public class ManaManager : MonoBehaviour
             {
                 type = (ManaType) (manaGeneratedCount % 11),
                 quantity = manaGenerationRate,
-                particleAge = 0,
                 particleX = x,
                 particleY = 16,
-                inertia = 1,
-                velocity = new Vector2(0, 0),
                 prevOrb = -1,
                 nextOrb = 0
             };
@@ -197,11 +207,8 @@ public class ManaManager : MonoBehaviour
             {
                 type = (ManaType)(manaGeneratedCount % 11),
                 quantity = manaGenerationRate,
-                particleAge = 0,
                 particleX = x,
                 particleY = 16,
-                inertia = 1,
-                velocity = new Vector2(0, 0),
                 prevOrb = -1,
                 nextOrb = 0
             };

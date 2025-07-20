@@ -37,21 +37,22 @@ public class OddsMaker : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             // Baseline direction bias: cardinal (even indices) more likely than diagonal
-            bool isCardinal = (i % 2 == 0);
-            dirWeights[i] = isCardinal ? 1.4f : 1.0f;
+            dirWeights[i] = (i % 2 == 0) ? 28f : 20f;
 
             // Aggregate the neighboring tile's mana
             var agg = neighborContainers[i].GetAggregatedMana();
 
             // Add attraction for positive types
             foreach (var p in relation.positiveTypes)
-                if (agg.TryGetValue(p.type, out int q))
+                if (agg.TryGetValue(p.type, out float q))
                     dirWeights[i] += p.weight * q;
 
             // Subtract repulsion for negative types
             foreach (var n in relation.negativeTypes)
-                if (agg.TryGetValue(n.type, out int q2))
+                if (agg.TryGetValue(n.type, out float q2))
                     dirWeights[i] -= n.weight * q2;
+
+            dirWeights[i] += neighborContainers[i].GetManaGap() * 2;
 
             // Clamp so we never go negative
             dirWeights[i] = Mathf.Max(0, dirWeights[i]);

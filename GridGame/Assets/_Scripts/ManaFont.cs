@@ -38,11 +38,8 @@ public class ManaFont : MonoBehaviour, ManaFeature
         {
             type = type,
             quantity = quantity > 4 ? 4 : quantity,
-            particleAge = 0,
             particleX = tile.coordX,
             particleY = tile.coordY,
-            inertia = 1,
-            velocity = new Vector2(0, 0),
             prevOrb = -1,
             nextOrb = 0
         };

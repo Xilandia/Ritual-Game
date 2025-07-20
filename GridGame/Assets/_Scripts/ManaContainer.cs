@@ -16,7 +16,7 @@ public class ManaContainer : MonoBehaviour
     private List<ManaParticle> incomingParticles = new List<ManaParticle>();
     private List<ManaParticle> outgoingParticles = new List<ManaParticle>();
     private int manaCount;
-    private int manaVolume; // separate for aspect calculation
+    private float manaVolume; // separate for aspect calculation
     private bool manaAdded;
 
     void Start()
@@ -68,9 +68,9 @@ public class ManaContainer : MonoBehaviour
         return nextOrb;
     }
 
-    public Dictionary<ManaType, int> GetAggregatedMana() // Format might not work with what I have in mind, will update later
+    public Dictionary<ManaType, float> GetAggregatedMana() // Format might not work with what I have in mind, will update later
     {
-        Dictionary<ManaType, int> aggregated = new Dictionary<ManaType, int>();
+        Dictionary<ManaType, float> aggregated = new Dictionary<ManaType, float>();
         foreach (var mp in manaParticles)
         {
             if (aggregated.ContainsKey(mp.type))
@@ -88,6 +88,7 @@ public class ManaContainer : MonoBehaviour
 
         float pBase = (float)(manaVolume - softCap) / manaCount;
         Dictionary<int, int> ejectedParticles = new Dictionary<int, int>();
+        var agg = GetAggregatedMana();
 
         for (int i = 0; i < manaParticles.Count; i++)
         {
@@ -98,14 +99,12 @@ public class ManaContainer : MonoBehaviour
             
             if (ManaTypeRelationDB.Instance.Dict.TryGetValue(mp.type, out var relation))
             {
-                var agg = GetAggregatedMana();
-
                 foreach (var pos in relation.positiveTypes)
-                    if (agg.TryGetValue(pos.type, out int qPos))
+                    if (agg.TryGetValue(pos.type, out float qPos))
                         weightModifier -= pos.weight / 5 * qPos;
                 
                 foreach (var neg in relation.negativeTypes)
-                    if (agg.TryGetValue(neg.type, out int qNeg))
+                    if (agg.TryGetValue(neg.type, out float qNeg))
                         weightModifier += neg.weight / 5 * qNeg;
             }
 
@@ -125,10 +124,18 @@ public class ManaContainer : MonoBehaviour
         foreach (KeyValuePair<int, int> kvp in ejectedParticles)
         {
             ManaParticle mp = manaParticles[kvp.Key];
+            float remainder = 0;
 
             mp.quantity -= kvp.Value;
+
+            if (mp.quantity < 0)
+            {
+                remainder = mp.quantity;
+                mp.quantity = 0;
+            }
+
             manaCount -= kvp.Value;
-            manaVolume -= kvp.Value;
+            manaVolume -= kvp.Value + remainder;
             manaParticles[kvp.Key] = mp;
 
             ManaParticle ejected = mp;
@@ -191,7 +198,7 @@ public class ManaContainer : MonoBehaviour
 
         foreach (ManaParticle mp in manaParticles)
         {
-            manaCount += mp.quantity;
+            manaCount += Mathf.CeilToInt(mp.quantity);
             manaVolume += mp.quantity;
         }
 
@@ -201,8 +208,6 @@ public class ManaContainer : MonoBehaviour
 
     public void TransferManaParticle(ManaParticle particle)
     {
-        manaCount -= particle.quantity;
-        manaVolume -= particle.quantity;
         Tile target = OddsMaker.Instance.DecideTarget(particle, tile);
 
         particle.particleX = target.coordX;
@@ -211,5 +216,43 @@ public class ManaContainer : MonoBehaviour
         particle.nextOrb = target.AddMana(particle);
 
         outgoingParticles.Add(particle);
+    }
+
+    public int GetQuantityOf(ManaType type)
+    {
+        for (int i = 0; i < manaParticles.Count; i++)
+        {
+            if (manaParticles[i].type == type)
+            {
+                return Mathf.FloorToInt(manaParticles[i].quantity);
+            }
+        }
+        return 0;
+    }
+
+    public int ExtractMana(ManaType type, int amount, Tile tile)
+    {
+        for (int i = 0; i < manaParticles.Count; i++)
+        {
+            if (manaParticles[i].type == type)
+            {
+                int available = Mathf.FloorToInt(manaParticles[i].quantity);
+                int taken = Mathf.Min(available, amount);
+
+                ManaParticle mp = manaParticles[i];
+                mp.quantity -= taken;
+                manaParticles[i] = mp;
+                manaCount -= taken;
+                manaVolume -= taken;
+                //visualize extraction of mana
+                return taken;
+            }
+        }
+        return 0;
+    }
+
+    public int GetManaGap()
+    {
+        return Mathf.Max(0, softCap - manaCount);
     }
 }

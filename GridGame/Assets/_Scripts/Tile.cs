@@ -181,6 +181,15 @@ public class Tile : MonoBehaviour
         character.UseEquippedItem();
     }
 
+    public void CharacterStartRitual()
+    {
+        if (character is Player)
+        {
+            Player player = (Player)character;
+            player.StartRitual();
+        }
+    }
+
     public void CharacterTurn(CharacterFaceDirection direction)
     {
         character.TurnCharacter(direction);
@@ -348,6 +357,11 @@ public class Tile : MonoBehaviour
         }
 
         return neighborContainers;
+    }
+
+    public ManaContainer GetManaContainer()
+    {
+        return manaContainer;
     }
 
     public ManaVisualizer GetManaVisualizer()

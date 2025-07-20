@@ -113,4 +113,9 @@ public class Enemy : MonoBehaviour, ICharacter
             Debug.Log($"Enemy \"{Name}\" has died");
         }
     }
+
+    public int GetConversionCapacity()
+    {
+        return 5; // Add stat based calculation
+    }
 }

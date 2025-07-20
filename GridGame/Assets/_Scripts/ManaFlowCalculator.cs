@@ -15,7 +15,7 @@ public class ManaFlowCalculator : MonoBehaviour
     public ManaParticle CalculateManaFlow(Tile tile, ManaContainer manaContainer, ManaParticle manaParticle)
     {
         // TODO: Enrich this method with your flow rules, based on mana type and surrounding Tiles
-        manaParticle.particleAge++;
+        /*manaParticle.particleAge++;
         manaParticle.velocity = ChooseFlowEquation(manaParticle);
 
         int dx = Mathf.RoundToInt(manaParticle.velocity.x);
@@ -46,12 +46,16 @@ public class ManaFlowCalculator : MonoBehaviour
             manaParticle.particleY = GridManager.Instance.height + 1;
         }
 
-        return manaParticle;
+        return manaParticle;*/
+
+        Debug.Log($"ManaFlowCalculator is no longer in use, does nothing.");
+
+        return new ManaParticle();
     }
 
     private Vector2 ChooseFlowEquation(ManaParticle manaParticle)
     {
-        Vector2 flow;
+        /*Vector2 flow;
         int mult = manaParticle.inertia; 
         ManaType type = manaParticle.type;
 
@@ -95,7 +99,9 @@ public class ManaFlowCalculator : MonoBehaviour
                 break;
         }
 
-        return flow * mult;
+        return flow * mult;*/
+
+        return new Vector2(0f, 0f);
     }
 
     Vector2 SinusoidalFlow(int x, int y, float t)
