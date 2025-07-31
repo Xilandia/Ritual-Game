@@ -29,6 +29,7 @@ public class ManaTypeConversionDB : MonoBehaviour
     private void BuildDictionary()
     {
         dict = new Dictionary<ManaType, ManaTypeConversionSO>();
+
         if (relations == null)
         {
             Debug.LogWarning("[ManaTypeRelationDB] No relations assigned!");
